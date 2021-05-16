@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
+
+    protected $table = 'product';
+    protected $primaryKey = 'ProductID';
+    
+   public function productcategories()
+    {
+        return belongsTo(Categories::class);
+    }
+    
 }

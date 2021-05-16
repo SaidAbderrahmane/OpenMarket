@@ -24,13 +24,17 @@ class CreateProductsTable extends Migration
 		$table->text('ProductLongDesc');
 		$table->string('ProductThumb',100);
 		$table->string('ProductImage',100);
-		$table->integer('ProductCategoryID')->nullable()->default(NULL);
+		$table->integer('ProductCategoryID')->unsigned()->nullable()->default(NULL);
 		$table->timestamp('ProductUpdateDate');
 		$table->float('ProductStock')->nullable()->default(NULL);
 		$table->tinyInteger('ProductLive')->default(0);
 		$table->tinyInteger('ProductUnlimited')->default(0);
 		$table->string('ProductLocation',250)->nullable()->default(NULL);
         $table->timestamps();
+        $table->foreign('ProductCategoryID')
+        ->references('CategoryID')
+        ->on('Categories')
+        ->onDelete('cascade');
         });
     }
 
