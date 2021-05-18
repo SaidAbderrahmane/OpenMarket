@@ -9,9 +9,15 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $table = 'product';
-    protected $primaryKey = 'ProductID';
+    protected $table = 'products';
+    protected $primaryKey = 'id';
     
+    protected $fillable = [
+        'title',
+        'subtitle',
+        'image',
+        'price'
+    ];
    public function productcategories()
     {
         return belongsTo(Categories::class);

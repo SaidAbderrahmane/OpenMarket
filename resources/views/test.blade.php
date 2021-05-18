@@ -4,21 +4,16 @@
 $i = 1;
 @endphp
 
-@foreach ($data as $item )
-
 <div class="container p-2">
     <div class="row justify-content-center ">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Categorie '.$i) }}</div>
+                <div class="card-header">{{ __('Product '.$i) }}</div>
 
                 <div class="card-body">
                         <div class="alert alert-success" >
-                          {{  $item->Name }}
-                        </div>
-                        <div>
-                        <img src="{{ $item->Image }}" alt="">
-                        </div>
+                          {{ $product->title }}
+                        </div>  
                 </div>
             </div>
         </div>
@@ -28,5 +23,4 @@ $i = 1;
   $i++;   
 @endphp
 
-@endforeach
 @endsection
