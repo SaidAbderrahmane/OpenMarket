@@ -3,22 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Categories;
 
 class ProductsController extends Controller
 {
     public function index(){
-        $title="welcome to my world!!";
-        $data = [
-            'productOne' => 'Huawei',
-            'productkda' => 'Poco'
-        ];
 
-        return view('products.index',compact('data'));
+        $data = Categories::all();
+
+        return view('welcome',[
+            'data' => $data
+        ]);
     }
 
-    public function about() {
-        return 'about us page or whatever!';
-    }
     public function details($name){
         $data = [
             'iphone' => 'Iphone XR',
