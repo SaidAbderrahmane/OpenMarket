@@ -4,25 +4,26 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Categories;
+use App\Models\Product;
 
 class ProductsController extends Controller
 {
-    public function index(){
-
-        $data = Categories::all();
-
-        return view('welcome',[
-            'data' => $data
+    public function index()
+    {
+        $products = Product::all();
+        return view('boutique.shop',[
+            'products'=> $products
         ]);
     }
 
-    public function details($name){
-        $data = [
-            'iphone' => 'Iphone XR',
-            'huawei' => 'Huawei p50 pro'
-        ];
-        return view('products.details',[
-            'product' => $data[$name] ?? 'product '.$name.' does not exist'
+    public function details($slug)
+    {   
+        $products = Product::all();
+        $product = Product::where('slug','=',$slug)->get()->first();
+
+        return view('boutique.detail', [
+            'product' => $product ?? 'product ' . $slug . ' does not exist',
+            'products' => $products
         ]);
     }
 }

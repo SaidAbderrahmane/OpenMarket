@@ -92,23 +92,23 @@
             </div>
           </div>
           <div class="row">
-          @for ($i=1; $i<=12 ; $i++)
-          @include('boutique.product')
-          @endfor
+            @foreach ($products as $product)
+            @include('boutique.product')
+            @endforeach
 
-          <!-- PAGINATION-->
-          <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center justify-content-lg-end">
-              <li class="page-item"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
-              <li class="page-item active"><a class="page-link" href="#">1</a></li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
-            </ul>
-          </nav>
+            <!-- PAGINATION-->
+            <nav aria-label="Page navigation example">
+              <ul class="pagination justify-content-center justify-content-lg-end">
+                <li class="page-item"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+              </ul>
+            </nav>
+          </div>
         </div>
       </div>
-    </div>
   </section>
 </div>
 @include('boutique.jsFiles')
@@ -116,26 +116,26 @@
 <script>
   var range = document.getElementById('range');
   noUiSlider.create(range, {
-      range: {
-          'min': 0,
-          'max': 2000
+    range: {
+      'min': 0,
+      'max': 2000
+    },
+    step: 5,
+    start: [100, 1000],
+    margin: 300,
+    connect: true,
+    direction: 'ltr',
+    orientation: 'horizontal',
+    behaviour: 'tap-drag',
+    tooltips: true,
+    format: {
+      to: function(value) {
+        return '$' + value;
       },
-      step: 5,
-      start: [100, 1000],
-      margin: 300,
-      connect: true,
-      direction: 'ltr',
-      orientation: 'horizontal',
-      behaviour: 'tap-drag',
-      tooltips: true,
-      format: {
-        to: function ( value ) {
-          return '$' + value;
-        },
-        from: function ( value ) {
-          return value.replace('', '');
-        }
+      from: function(value) {
+        return value.replace('', '');
       }
+    }
   });
 </script>
 @endsection
