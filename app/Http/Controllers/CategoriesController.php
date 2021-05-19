@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Categories;
+use App\Models\Category;
 
 class CategoriesController extends Controller
 {
@@ -14,9 +14,9 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        $data = Categories::all();
+        $data = Category::all();
 
-        return view('welcome', [
+        return view('dashboard.categories', [
             'data' => $data
         ]);
     }
@@ -28,7 +28,7 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-        //
+        view('dashboard.categories');   //
     }
 
     /**
@@ -39,7 +39,21 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'image' => 'required|mimes:png,jpg,jpeg|max:5048'
+        ]);
+            $newImageName = time().'-'.$request->name.'.'.$request->image->extension();
+            $request->image->move(public_path('images'),$newImageName);
+        $category = Category::create(
+            [
+                'name' => $request->input('name'),
+                'image' => $request->input('image'),
+                'parentid' => $request->input('parentid'),
+                'image' => $newImageName
+            ]
+        );
+        return redirect('dashboard/categories');
     }
 
     /**
@@ -61,7 +75,7 @@ class CategoriesController extends Controller
      */
     public function edit($id)
     {
-        //
+        view('admin.categories');
     }
 
     /**
