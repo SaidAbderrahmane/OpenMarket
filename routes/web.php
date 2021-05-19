@@ -15,7 +15,7 @@ use App\Http\Controllers\ProductsController;
 */
 Auth::routes();
 Route::get('/products','App\Http\Controllers\ProductsController@index')->name('shop');
-Route::get('/categories','App\Http\Controllers\CategoriesController@index');
+//Route::get('/categories','App\Http\Controllers\CategoriesController@index');
 
 Route::get('/about', 'App\Http\Controllers\ProductsController@about');
 
@@ -28,4 +28,6 @@ Route::view('/shop', 'boutique.shop');
 Route::view('/detail', 'boutique.detail')->name('detail');
 Route::view('/cart', 'boutique.cart')->name('cart');
 Route::view('/checkout', 'boutique.checkout')->name('checkout');
-Route::view('/admin', 'admin.index')->name('admin');
+Route::view('/dashboard', 'dashboard.index')->name('dashboard');
+Route::resource('/dashboard/categories',App\Http\Controllers\CategoriesController::class);
+Route::view('/dashboard/products', 'dashboard.products')->name('products');

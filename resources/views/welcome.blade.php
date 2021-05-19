@@ -14,10 +14,10 @@ $i = 1;
 
                 <div class="card-body">
                         <div class="alert alert-success" >
-                          {{  $item->Name }}
+                          {{  $item->name }}
                         </div>
                         <div>
-                        <img src="{{ $item->Image }}" alt="">
+                        <img src="{{ $item->image }}" alt="">
                         </div>
                 </div>
             </div>
