@@ -24,7 +24,7 @@ $i = 1;
                                 <label for="image" class="col-md-4 col-form-label text-md-right">{{ __('Image File :') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="image" type="file" class="file-control " name="image"  autofocus>
+                                    <input id="image" type="file" class="file-control " name="image" required autofocus>
                                 </div>
 
                                 <label for=" name" class="col-md-4 col-form-label text-md-right">{{ __('Category Name :') }}</label>
@@ -33,14 +33,14 @@ $i = 1;
                                     <input id="name" type="text" class="form-control" name="name" required autofocus>
                                 </div>
 
-                                
-                                <label for=" parentid" class="col-md-4 col-form-label text-md-right">{{ __('Parent Category (id) :') }}</label>
-
-                                <div class="col-md-6">
-                                <select name="parent" id="parentCat">
-                                <option value="{{ $item->parent}}"></option>
-                                </select>
-                                    <input id="parentid" type="text" class="form-control" name="parentid" required autofocus>
+                                <label for="parentid" class="col-md-4 col-form-label text-md-right mt-2 ">{{ __('Parent Category (id) :') }}</label>
+                                <div class="col-md-6 mt-2">
+                                    <select class="custom-select" name="parentid" id="parentid">
+                                        <option value=""> none</option>
+                                        @foreach ($data as $item)
+                                        <option value="{{ $item->id }}"> {{ $item->name }} </option>
+                                        @endforeach
+                                    </select>
                                 </div>
 
 
@@ -61,34 +61,66 @@ $i = 1;
 
             @foreach ($data as $item )
 
-            <div class="card">
+            <div class="card mb-5">
                 <div class="card-header">{{ __('Categorie '.$i) }}</div>
 
                 <div class="card-body">
-                    <div class="alert alert-success">
-                        {{ $item->name }}<br> parent category : {{ $item->parentid}}
-                        <a style="float: right;" href="/category/delete/{{ $item->id }}">delete</a>
-                        <a style="float: right; padding-right: 10px;" href="/category/edit/{{ $item->id }}" onclick="toggleDisplay('edit{{ $i }}');">edit </a>
+                    <div class="alert alert-success pb-5">
+                        {{ $item->name }}<br> parent category :
+                        @if ($item->parent != null)
+                        {{ $item->parent->name }}
+                        @else none
+                        @endif
 
-                    </div>
-                    <div>
-                        <img src="{{ asset('images/'. $item->image) }}" width="500" height="250" alt="">
-                    </div>
-                    <div id="edit{{ _($i) }}" class="p-2" style="display:none">
-                        <form method="POST" action="dashboard/categories">
+                        <a style="float: right; padding-right: 10px;" href="#!" onclick="toggleDisplay('edit{{ $i }}');">Edit &rAarr; </a>
+                        <form action="/dashboard/categories/{{ $item->id }}" method="POST">
                             @csrf
+                            @method('delete')
+
+                            <button type="submit" style="background-color: transparent; border:none; color:red; float:right;">
+                                Delete &rAarr;
+                            </button>
+
+                        </form>
+                    </div>
+                    <div style="text-align: center;">
+                        <img src="{{ asset('images/'. $item->image) }}" height="250" alt="">
+                    </div>
+
+
+                    <div id="edit{{ _($i) }}" class="mt-3" style="display:none">
+                        <form method="POST" action="/dashboard/categories/{{ $item->id }}" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
 
                             <div class="form-group row ">
                                 <label for="image" class="col-md-4 col-form-label text-md-right">{{ __('Image File :') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="image" type="file" class="file-control " name="image" required autofocus>
+                                    <input id="image" name="image" type="file" class="file-control" autofocus>
                                 </div>
 
                                 <label for=" name" class="col-md-4 col-form-label text-md-right">{{ __('Category Name :') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="name" type="text" class="form-control" value="{{ $item->name }}" name="name" required autofocus>
+                                    <input id="name" name="name" type="text" class="form-control" value="{{ $item->name }}" required autofocus>
+                                </div>
+
+                                <label for="parentid" class="col-md-4 col-form-label text-md-right mt-2 ">
+                                    {{ __('Parent Category (id) :')}}
+                                </label>
+                                <div class="col-md-6 mt-2">
+                                    <select class="custom-select" name="parentid" id="parentid{{$i}}">
+                                        <option value=""> none</option>
+                                        @foreach ($data as $cat)
+                                        @if($cat->id != $item->id)
+                                        <option value="{{ $cat->id }}"> {{ $cat->name }} </option>
+                                        @endif
+                                        <script>
+                                            document.getElementById("parentid{{$i}}").value = "{{ $item->parentid }}";
+                                        </script>
+                                        @endforeach
+                                    </select>
                                 </div>
 
                             </div>

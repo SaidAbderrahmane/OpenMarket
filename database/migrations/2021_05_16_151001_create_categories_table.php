@@ -19,7 +19,7 @@ class CreateCategoriesTable extends Migration
             $table->string('name',50);
             $table->string('image');
             $table->integer('parentid')->nullable()->unsigned()->default(null);
-            $table->foreign('parentid')->references('id')->on('categories');
+            $table->foreign('parentid')->references('id')->on('categories')->onDelete('set Null');
             $table->timestamps();
         });
     }
