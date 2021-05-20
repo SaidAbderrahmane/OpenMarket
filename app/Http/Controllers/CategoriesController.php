@@ -15,6 +15,8 @@ class CategoriesController extends Controller
     public function index()
     {
         $data = Category::all();
+        $test = Category::find(37);
+         //dd($test->parent->name);
 
         return view('dashboard.categories', [
             'data' => $data
@@ -28,7 +30,7 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-        view('dashboard.categories');   //
+        return view('dashboard.categories');
     }
 
     /**
@@ -43,12 +45,12 @@ class CategoriesController extends Controller
             'name' => 'required',
             'image' => 'required|mimes:png,jpg,jpeg|max:5048'
         ]);
-            $newImageName = time().'-'.$request->name.'.'.$request->image->extension();
-            $request->image->move(public_path('images'),$newImageName);
+        $newImageName = time() . '-' . $request->name . '.' . $request->image->extension();
+        $request->image->move(public_path('images'), $newImageName);
+
         $category = Category::create(
             [
                 'name' => $request->input('name'),
-                'image' => $request->input('image'),
                 'parentid' => $request->input('parentid'),
                 'image' => $newImageName
             ]
@@ -75,7 +77,8 @@ class CategoriesController extends Controller
      */
     public function edit($id)
     {
-        view('admin.categories');
+        return view('dashboard.categories');
+        dd('$id');
     }
 
     /**
@@ -87,7 +90,24 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'image' => 'mimes:png,jpg,jpeg|max:5048'
+        ]);
+        $category = Category::where('id', $id);
+        $newImageName = $category->first()->image;
+        if(!empty($request->image)){
+            $newImageName = time() . '-' . $request->name . '.' . $request->image->extension();
+            $request->image->move(public_path('images'), $newImageName);
+        } 
+        $category->update(
+            [
+                'name' => $request->input('name'),
+                'parentid' => $request->input('parentid'),
+                'image' => $newImageName 
+            ]
+        );
+        return redirect('dashboard/categories');
     }
 
     /**
@@ -97,7 +117,10 @@ class CategoriesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-        //
+    {   
+        $category = Category::where('id',$id)->first();
+        $category->delete();
+   
+        return redirect('/dashboard/categories');
     }
 }

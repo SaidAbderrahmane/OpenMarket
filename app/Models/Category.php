@@ -19,11 +19,16 @@ class Category extends Model
     ];
 
     
-    public function product_categories (){
-        return $this->hasMany(Product::class);
+    public function products (){
+        return $this->hasMany(Product::class,'id','id');
+    }
+        
+    public function subcategories (){
+        return $this->hasMany(Category::class,'parentid');
     }
 
-    public function category_parent (){
-        return $this->belongsTo(Category::class);
+    public function parent (){
+        return $this->hasOne(Category::class,'id','parentid');
     }
+
 }
