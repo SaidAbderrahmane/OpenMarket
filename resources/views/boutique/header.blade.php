@@ -21,7 +21,7 @@
         
         <!-- Right Side Of Navbar -->
         <ul class="navbar-nav ml-auto">
-        <li class="nav-item"><a class="nav-link" href=" {{ route('cart') }} "> <i class="fas fa-dolly-flatbed mr-1 text-gray"></i>Cart<small class="text-gray">(2)</small></a></li>
+        <li class="nav-item"><a class="nav-link" href=" {{ route('cart') }} "> <i class="fas fa-dolly-flatbed mr-1 text-gray"></i>Cart<small class="text-gray">({{ Cart::count() }})</small></a></li>
             <li class="nav-item"><a class="nav-link" href="#"> <i class="far fa-heart mr-1"></i><small class="text-gray"> (0)</small></a></li>
             <!-- Authentication Links -->
             @guest

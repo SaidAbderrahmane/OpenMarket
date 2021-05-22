@@ -6,7 +6,14 @@
             <div class="product-overlay">
                 <ul class="mb-0 list-inline">
                     <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#"><i class="far fa-heart"></i></a></li>
-                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-dark" href=" {{ route('cart') }} ">Add to cart</a></li>
+                    <li class="list-inline-item m-0 p-0">
+                        <form action="{{ route('cart.store') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="id" value="{{ $product->id }}">
+                            <input type="hidden" name="qty" value="1" >
+                            <button type="submit" class="btn btn-sm btn-dark">Add to cart</button>
+                        </form>
+                    </li>
                     <li class="list-inline-item mr-0"><a class="btn btn-sm btn-outline-dark" onclick="" href="#productView" data-toggle="modal"><i class="fas fa-expand"></i></a></li>
                 </ul>
             </div>
