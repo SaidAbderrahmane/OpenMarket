@@ -19,7 +19,7 @@ class ProductsController extends Controller
     public function details($slug)
     {   
         $products = Product::all();
-        $product = Product::where('slug','=',$slug)->get()->first();
+        $product = Product::where('slug','=',$slug)->firstOrFail();
 
         return view('boutique.detail', [
             'product' => $product ?? 'product ' . $slug . ' does not exist',
