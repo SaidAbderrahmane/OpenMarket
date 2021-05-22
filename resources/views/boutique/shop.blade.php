@@ -3,6 +3,14 @@
 @include('boutique.modal')
 
 <div class="container">
+  @if (session('success'))
+  <div class="alert alert-success">
+    {{ session('success') }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  @endif
   @include('boutique.heroSection')
   <section class="py-5">
     <div class="container p-0">

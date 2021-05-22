@@ -9,7 +9,7 @@
 <div class="col-xl-3 col-lg-4 col-sm-6">
     <div class="product text-center">
         <div class="position-relative mb-3 p-5">
-            <div class="badge text-white badge-"></div><a class="d-block" href=" {{ route('detail') }} "><img class="img-fluid w-100" src="https://via.placeholder.com/500x750" alt="..."></a>
+            <div class="badge text-white badge-"></div><a class="d-block" href="#!"><img class="img-fluid w-100" src="https://via.placeholder.com/500x750" alt="..."></a>
             <div class="product-overlay">
                 <ul class="mb-0 list-inline">
                     <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#"><i class="far fa-heart"></i></a></li>
