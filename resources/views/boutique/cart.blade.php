@@ -33,7 +33,7 @@
 
   <section class="py-5">
     <h2 class="h5 text-uppercase mb-4">Shopping cart</h2>
-    <div class="row">
+    <div class="row"> 
       <div class="col-lg-8 mb-4 mb-lg-0">
         <!-- CART TABLE-->
         <div class="table-responsive mb-4">
@@ -96,9 +96,10 @@
           <div class="card-body">
             <h5 class="text-uppercase mb-4">Cart total</h5>
             <ul class="list-unstyled mb-0">
-              <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small font-weight-bold">Subtotal</strong><span class="text-muted small">$250</span></li>
+              <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small font-weight-bold">Subtotal</strong><span class="text-muted small">{{ getPrice(Cart::subtotal()) }}</span></li>
+              <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small font-weight-bold">Tax</strong><span class="text-muted small">{{ getPrice(Cart::tax()) }}</span></li>
               <li class="border-bottom my-2"></li>
-              <li class="d-flex align-items-center justify-content-between mb-4"><strong class="text-uppercase small font-weight-bold">Total</strong><span>$250</span></li>
+              <li class="d-flex align-items-center justify-content-between mb-4"><strong class="text-uppercase small font-weight-bold">Total</strong><span>{{ getPrice(Cart::total()) }}</span></li>
               <li>
                 <form action="#">
                   <div class="form-group mb-0">
