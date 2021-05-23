@@ -1,6 +1,6 @@
-@extends('boutique.app')
+@extends('layouts.app')
 @section('content')
-@include('boutique.modal')
+@include('layouts.modal')
 
 <div class="container">
   @if (session('success'))
@@ -11,7 +11,7 @@
     </button>
   </div>
   @endif
-  @include('boutique.heroSection')
+  @include('layouts.heroSection')
   <section class="py-5">
     <div class="container p-0">
       <div class="row">
@@ -101,7 +101,7 @@
           </div>
           <div class="row">
             @foreach ($products as $product)
-            @include('boutique.product')
+            @include('products.product')
             @endforeach
 
             <!-- PAGINATION-->
@@ -119,8 +119,10 @@
       </div>
   </section>
 </div>
-@include('boutique.jsFiles')
-<!-- Nouislider Config-->
+@include('layouts.jsFiles')
+@endsection
+@section('extra-js')
+  <!-- Nouislider Config-->
 <script>
   var range = document.getElementById('range');
   noUiSlider.create(range, {

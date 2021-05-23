@@ -1,6 +1,6 @@
-@extends('boutique.app')
+@extends('layouts.app')
 @section('content')
-@include('boutique.modal')
+@include('layouts.modal')
 <section class="py-5">
   <div class="container">
     <div class="row mb-5">
@@ -123,10 +123,10 @@
     <h2 class="h5 text-uppercase mb-4">Related products</h2>
     <div class="row">
       @foreach ($products as $product)
-      @include('boutique.product')
+      @include('products.product')
       @endforeach
     </div>
   </div>
 </section>
-@include('boutique.jsFiles')
+@include('layouts.jsFiles')
 @endsection

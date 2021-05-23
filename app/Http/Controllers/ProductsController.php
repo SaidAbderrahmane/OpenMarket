@@ -12,7 +12,7 @@ class ProductsController extends Controller
     public function index()
     {
         $products = Product::all();
-        return view('boutique.shop', [
+        return view('products.shop', [
             'products' => $products
         ]);
     }
@@ -22,7 +22,7 @@ class ProductsController extends Controller
         $products = Product::all();
         $product = Product::where('slug', '=', $slug)->firstOrFail();
 
-        return view('boutique.detail', [
+        return view('products.detail', [
             'product' => $product ?? 'product ' . $slug . ' does not exist',
             'products' => $products
         ]);

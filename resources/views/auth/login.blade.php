@@ -1,4 +1,4 @@
-@extends('boutique.app')
+@extends('layouts.app')
 
 @section('content')
 <div class="container p-5">
@@ -70,5 +70,5 @@
         </div>
     </div>
 </div>
-@include('boutique.jsFiles')
+@include('layouts.jsFiles')
 @endsection

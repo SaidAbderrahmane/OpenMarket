@@ -1,7 +1,7 @@
-@extends('boutique.app')
+@extends('layouts.app')
 @section('content')
 
-@include('boutique.modal')
+@include('layouts.modal')
 <div class="container">
 @if (session('success'))
   <div class="alert alert-success">
@@ -121,5 +121,5 @@
   </div>
   @endif
 </div>
-@include('boutique.jsFiles')
+@include('layouts.jsFiles')
 @endsection

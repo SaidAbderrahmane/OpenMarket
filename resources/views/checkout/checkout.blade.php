@@ -1,6 +1,9 @@
-@extends('boutique.app')
+@extends('layouts.app')
+@section('extra-script')
+<script src="https://js.stripe.com/v3/"></script>
+@endsection
 @section('content')
-@include('boutique.modal')
+@include('layouts.modal')
       <div class="container">
         <!-- HERO SECTION-->
         <section class="py-5 bg-light">
@@ -145,6 +148,5 @@
           </div>
         </section>
       </div>
-      @include('boutique.footer')
-@include('boutique.jsFiles')
+@include('layouts.jsFiles')
 @endsection
