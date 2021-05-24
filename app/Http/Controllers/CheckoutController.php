@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Stripe\Stripe;
 use Stripe\PaymentIntent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use App\Models\Order;
 
 class CheckoutController extends Controller
 {
@@ -17,7 +21,7 @@ class CheckoutController extends Controller
      */
     public function index()
     {
-        if(Cart::count()<=0){
+        if (Cart::count() <= 0) {
             return redirect()->route('shop');
         }
         Stripe::setApiKey('sk_test_51IuDBqFgbAj6W3MWKqTB7UzZXYjcRiRFgcEH3D8piflVmBcHkzw52wLq5QnqL76DSKdg9bclwEaJsxYCyFKzIbzg00ILtQBbNu');
@@ -25,6 +29,9 @@ class CheckoutController extends Controller
         $intent = PaymentIntent::create([
             'amount' => round(Cart::total()),
             'currency' => 'usd',
+            'metadata' => [
+                'userId' => Auth::user()->id
+            ]
         ]);
         //Arr: an array helper of laravel 
         $clientSecret = Arr::get($intent, 'client_secret');
@@ -52,9 +59,38 @@ class CheckoutController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->json()->all();
+        $order = new Order();
+        $order->payment_intent_id = $data['paymentIntent']['id'];
+        $order->amount = $data['paymentIntent']['amount'];
+
+        $order->payment_created_at = (new DateTime())
+            ->setTimestamp($data['paymentIntent']['created'])
+            ->format('Y-m-d H:i:s');
+        $products = [];
+        $i = 0;
+        foreach (Cart::content() as $product) {
+            $products['product_' . $i][] = $product->model->title;
+            $products['product_' . $i][] = $product->model->amount;
+            $products['product_' . $i][] = $product->qty;
+            $i++;
+        }
+        $order->products =  serialize($products);
+        $order->user_id = Auth::user()->id;
+        $order->save();
+        if ($data['paymentIntent']['status'] === 'succeeded') {
+            Cart::destroy();
+            Session::flash('success', 'Your order has been added successfully!');
+            return response()->json(['success' => 'payment Intent Succeeded']);
+        } else {
+            return response()->json(['error' => 'Payment Intent Not succeeded']);
+        }
     }
 
+    public function thankyou()
+    {
+        return Session::has('success') ? view('checkout.thankyou') : redirect()->route('shop');
+    }
     /**
      * Display the specified resource.
      *

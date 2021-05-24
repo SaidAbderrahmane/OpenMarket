@@ -1,6 +1,9 @@
 @extends('layouts.app')
 @section('extra-script')
-
+<script src="https://js.stripe.com/v3/"></script>
+@endsection
+@section('extra-meta')
+<meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('content')
 <div class="container">
@@ -14,8 +17,8 @@
                 <div class="col-lg-6 text-lg-right">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-lg-end mb-0 px-0">
-                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                            <li class="breadcrumb-item"><a href="cart.html">Cart</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('shop') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('cart') }}">Cart</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Checkout</li>
                         </ol>
                     </nav>
@@ -29,7 +32,7 @@
 
         <div class="row justify-content-center p-5">
             <div class="col-xl-10">
-                <form action="#">
+                <form action=" {{ route('checkout.store') }}" method="POST" id="payment-form">
                     <div class="row">
                         <div id="card-element" class="col-lg-8 form-group">
                             <!-- <label class="text-small text-uppercase" for="address">Card number</label>
@@ -45,9 +48,11 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-5 form-group">
-                            <button id="submit" class="btn btn-primary" type="submit">submit</button>
+                            <button id="submit" class="btn btn-primary" type="submit">
+                                <span id="spinner" class="spinner-grow d-none spinner-grow-sm" role="status"></span>
+                                <span id="button-text">Pay now</span>
+                            </button>
                         </div>
-
                     </div>
                 </form>
             </div>
@@ -57,7 +62,6 @@
 @include('layouts.jsFiles')
 @endsection
 @section('extra-js')
-<script src="https://js.stripe.com/v3/"></script>
 <script>
     var stripe = Stripe('pk_test_51IuDBqFgbAj6W3MWZ7j39WaN8ZoCWVH3xWMty73jUPEiw6xkDNegt8xAhkXi2PLxcuJW4KaYZy4AZp1urto0LfCU00e0gOQ3vD');
     var elements = stripe.elements();
@@ -79,11 +83,12 @@
     var card = elements.create("card", {
         style: style
     });
+    const displayError = document.getElementById('card-errors');
     card.mount("#card-element");
     card.addEventListener('change', ({
         error
     }) => {
-        const displayError = document.getElementById('card-errors');
+
         if (error) {
             displayError.classList.add('alert', 'alert-warning', 'mt-3');
             displayError.textContent = error.message;
@@ -92,17 +97,23 @@
             displayError.textContent = '';
         }
     });
-
+    //soumission
     var submitButton = document.getElementById('submit');
     submitButton.addEventListener('click', function(ev) {
+        loading(true);
         ev.preventDefault();
+        submitButton.disabled = true;
         stripe.confirmCardPayment("{{ $clientSecret }}", {
             payment_method: {
                 card: card
             }
         }).then(function(result) {
             if (result.error) {
+                loading(false);
                 // Show error to your customer (e.g., insufficient funds)
+                submitButton.disabled = false;
+                displayError.classList.add('alert', 'alert-warning', 'mt-3');
+                displayError.textContent = result.error.message;
                 console.log(result.error.message);
             } else {
                 // The payment has been processed!
@@ -112,10 +123,51 @@
                     // execution. Set up a webhook or plugin to listen for the
                     // payment_intent.succeeded event that handles any business critical
                     // post-payment actions.
-                    console.log(result.paymentIntent);
+                    loading(false);
+                    var paymentIntent = result.paymentIntent;
+                    var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    var form = document.getElementById('payment-form');
+                    var url = form.action;
+                    var redirect = '/thankyou';
+
+                    //fetch request for AJAX
+                    fetch(
+                        url, {
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Accept": "application/json, text-plain, */*",
+                                "X-Requested-With": "XMLHttpRequest",
+                                "X-CSRF-TOKEN": token
+                            },
+                            method: 'post',
+                            body: JSON.stringify({ //format passed data 
+                                paymentIntent: paymentIntent
+                            })
+                            //when there's a positif return 
+                        }).then((data) => {
+                        console.log(data)
+                        window.location.href = redirect;
+
+                    }).catch((error) => {
+                        console.log(error)
+                    })
                 }
             }
         });
     });
+
+    // Show a spinner on payment submission
+    var loading = function(isLoading) {
+        if (isLoading) {
+            // Disable the button and show a spinner
+            document.querySelector("button").disabled = true;
+            document.querySelector("#spinner").classList.remove("d-none");
+            document.querySelector("#button-text").classList.add("d-none");
+        } else {
+            document.querySelector("button").disabled = false;
+            document.querySelector("#spinner").classList.add("d-none");
+            document.querySelector("#button-text").classList.remove("d-none");
+        }
+    };
 </script>
 @endsection

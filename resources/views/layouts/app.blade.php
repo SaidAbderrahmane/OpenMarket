@@ -4,12 +4,13 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  @yield('extra-meta')
   <title>Boutique</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="all,follow">
-  <!-- CSRF Token -->
-  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <!-- CSRF Token
+  <meta name="csrf-token" content="{{ csrf_token() }}"> -->
   <!-- Bootstrap CSS-->
   <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
   <!-- Lightbox-->
@@ -34,19 +35,17 @@
   <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
-        @yield('extra-script')
+  @yield('extra-script')
 </head>
 
 <body>
 
   <div class="page-holder">
     @include('layouts.header')
-
     @yield('content')
-
-    @include('layouts.footer')
   </div>
-  @yield('extra-js')
 </body>
+@include('layouts.footer')
+@yield('extra-js')
 
 </html>

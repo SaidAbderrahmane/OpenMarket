@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductsController;
 use App\Models\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,11 +16,12 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Auth::routes();
 
 //products
-Route::get('/products','App\Http\Controllers\ProductsController@index')->name('shop');
-Route::get('/products/{slug}','App\Http\Controllers\ProductsController@details')->where('slug','^[a-z][-\.a-z0-9]*')->name('detail');
+Route::get('/products', 'App\Http\Controllers\ProductsController@index')->name('shop');
+Route::get('/products/{slug}', 'App\Http\Controllers\ProductsController@details')->where('slug', '^[a-z][-\.a-z0-9]*')->name('detail');
 //auth
 Route::get('/   ', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -27,11 +29,11 @@ Route::view('/index', 'layouts.index')->name('index');
 
 //dashboard
 Route::view('/dashboard', 'dashboard.index')->name('dashboard');
-Route::resource('/dashboard/categories',App\Http\Controllers\CategoriesController::class);
+Route::resource('/dashboard/categories', App\Http\Controllers\CategoriesController::class);
 Route::view('/dashboard/products', 'dashboard.products')->name('products');
 
 //cart
-Route::post('/cart/add','App\Http\Controllers\CartController@store')->name('cart.store');
+Route::post('/cart/add', 'App\Http\Controllers\CartController@store')->name('cart.store');
 Route::get('/emptycart', function () {
     Cart::destroy();
 });
@@ -40,3 +42,5 @@ Route::delete('/cart/{rowId}', 'App\Http\Controllers\CartController@destroy')->n
 
 //checkout
 Route::get('/checkout', 'App\Http\Controllers\CheckoutController@index')->name('checkout');
+Route::post('/checkout', 'App\Http\Controllers\CheckoutController@store')->name('checkout.store');
+Route::get('/thankyou', 'App\Http\Controllers\CheckoutController@thankyou');

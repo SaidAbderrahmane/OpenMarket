@@ -20,7 +20,7 @@ class CreateProductsTable extends Migration
 		$table->string('slug',100);
 		$table->string('subtitle',100);
 		$table->string('description',250);
-        $table->float('price');
+        $table->price('price');
 		$table->string('image',100)->default(Null);;
 		$table->integer('categoryid')->unsigned()->nullable()->default(NULL);
 		$table->float('stock')->nullable()->default(NULL);
