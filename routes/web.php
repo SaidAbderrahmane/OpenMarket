@@ -33,11 +33,9 @@ Route::resource('/dashboard/categories', App\Http\Controllers\CategoriesControll
 Route::view('/dashboard/products', 'dashboard.products')->name('products');
 
 //cart
-Route::post('/cart/add', 'App\Http\Controllers\CartController@store')->name('cart.store');
-Route::get('/emptycart', function () {
-    Cart::destroy();
-});
+Route::post('/cart/add','App\Http\Controllers\CartController@store')->name('cart.store');
 Route::get('/cart', 'App\Http\Controllers\CartController@index')->name('cart');
+Route::patch('/cart/{rowId}', 'App\Http\Controllers\CartController@update')->name('cart.update');
 Route::delete('/cart/{rowId}', 'App\Http\Controllers\CartController@destroy')->name('cart.delete');
 
 //checkout

@@ -145,10 +145,11 @@
                             })
                             //when there's a positif return 
                         }).then((data) => {
-                        console.log(data)
+                        console.log(data);
+                        form.reset();
                         window.location.href = redirect;
 
-                    }).catch((error) => {
+                    }).catch((error) => { //in case of error
                         console.log(error)
                     })
                 }

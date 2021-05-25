@@ -20,10 +20,10 @@ class CreateProductsTable extends Migration
 		$table->string('slug',100);
 		$table->string('subtitle',100);
 		$table->string('description',250);
-        $table->price('price');
+        $table->integer('price');
 		$table->string('image',100)->default(Null);;
 		$table->integer('categoryid')->unsigned()->nullable()->default(NULL);
-		$table->float('stock')->nullable()->default(NULL);
+		$table->integer('stock')->nullable()->default(0);
         $table->timestamps();
         $table->foreign('categoryid')
         ->references('id')

@@ -1,11 +1,23 @@
 @extends('layouts.app')
-@section('content')
 
+@section('extra-meta')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
+
+@section('content')
 @include('layouts.modal')
 <div class="container">
-@if (session('success'))
+  @if (session('success'))
   <div class="alert alert-success">
     {{ session('success') }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  @endif
+  @if (session('error'))
+  <div class="alert alert-danger">
+    {{ session('error') }}
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -33,7 +45,7 @@
 
   <section class="py-5">
     <h2 class="h5 text-uppercase mb-4">Shopping cart</h2>
-    <div class="row"> 
+    <div class="row">
       <div class="col-lg-8 mb-4 mb-lg-0">
         <!-- CART TABLE-->
         <div class="table-responsive mb-4">
@@ -59,11 +71,10 @@
                   <p class="mb-0 small">{{ $product->model->getPrice() }}</p>
                 </td>
                 <td class="align-middle border-0">
-                  <div class="border d-flex align-items-center justify-content-between px-3"><span class="small text-uppercase text-gray headings-font-family">Quantity</span>
+                  <div class="border d-flex align-items-center justify-content-between px-3">
+                    <span class="small text-uppercase text-gray headings-font-family">Quantity</span>
                     <div class="quantity">
-                      <button class="dec-btn p-0"><i class="fas fa-caret-left"></i></button>
-                      <input class="form-control form-control-sm border-0 shadow-0 p-0" type="text" value="{{ $product->qty }}" />
-                      <button class="inc-btn p-0"><i class="fas fa-caret-right"></i></button>
+                      <input id="qty" name="qty" class="form-control form-control-md border-0 shadow-0 p-0" type="number" min="1" max="8" data-id="{{ $product->rowId }} " value="{{ $product->qty }}" />
                     </div>
                   </div>
                 </td>
@@ -72,9 +83,9 @@
                 </td>
                 <td class="align-middle border-0">
                   <form action="{{ route('cart.delete', $product->rowId) }}" method="POST">
-                  @csrf
-                  @method('DELETE')
-                    <button type="submit" class="reset-anchor bg-transparent border-0" ><i class="fas fa-trash-alt small text-muted"></i></button>
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="reset-anchor bg-transparent border-0"><i class="fas fa-trash-alt small text-muted"></i></button>
                   </form>
                 </td>
               </tr>
@@ -91,9 +102,9 @@
         </div>
       </div>
       <!-- ORDER TOTAL-->
-      <div class="col-lg-4">
+      <divclass="col-lg-4">
         <div class="card border-0 rounded-0 p-lg-4 bg-light">
-          <div class="card-body">
+          <div id="totals" class="card-body">
             <h5 class="text-uppercase mb-4">Cart total</h5>
             <ul class="list-unstyled mb-0">
               <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small font-weight-bold">Subtotal</strong><span class="text-muted small">{{ getPrice(Cart::subtotal()) }}</span></li>
@@ -111,15 +122,71 @@
             </ul>
           </div>
         </div>
-      </div>
     </div>
-  </section>
-
-  @else
-  <div class="alert alert-danger m-5">
-    Your cart is empty.
-  </div>
-  @endif
 </div>
+</section>
+
+@else
+<div class="alert alert-danger m-5">
+  Your cart is empty.
+</div>
+@endif
+</div>
+@endsection
+
+@section('extra-js')
 @include('layouts.jsFiles')
+
+<script>
+    var qty = document.querySelectorAll('#qty');
+    Array.from(qty).forEach((element) => {
+        element.addEventListener('change', function () {
+            var rowId = element.getAttribute('data-id');
+            var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            fetch(`/cart/${rowId}`,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json, text-plain, */*",
+                        "X-Requested-With": "XMLHttpRequest",
+                        "X-CSRF-TOKEN": token
+                    },
+                    method: 'PATCH',
+                    body: JSON.stringify({
+                        qty: this.value
+                    })
+            }).then((data) => {
+                console.log(data);
+                location.reload();
+            }).catch((error) => {
+                console.log(error);
+            });
+        });
+    });
+  // var select = document.querySelectorAll('#qty');
+
+  // select.addEventListener('change', function() {
+  //   var rowId = select.getAttribute('data-id');
+  //   var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+  //   fetch(
+  //     `/cart/${rowId}`, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Accept": "application/json, text-plain, */*",
+  //         "X-Requested-With": "XMLHttpRequest",
+  //         "X-CSRF-TOKEN": token
+  //       },
+  //       method: 'PATCH',
+  //       body: JSON.stringify({
+  //         qty: select.value
+  //       })
+  //     }).then((data) => {
+  //     console.log(data);
+  //     location.reload();
+  //   }).catch((error) => {
+  //     console.log(`/cart/${rowId}`);
+  //     console.log(error);
+  //   })
+  // })
+</script>
 @endsection

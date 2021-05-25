@@ -27,6 +27,7 @@ class ProductFactory extends Factory
             'subtitle' => $this->faker->sentence(2),    
             'description' => $this->faker->text,
             'price' => $this->faker->numberBetween(15,300)*100,    
+            'stock' => $this->faker->numberBetween(1,20),    
             'image' => "https://via.placeholder.com/350x150"
         ];
     }

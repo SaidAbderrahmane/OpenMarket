@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
@@ -36,16 +38,16 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-        $duplicata = Cart::search(function ($cartItem, $rowId)
+        $duplicate = Cart::search(function ($cartItem, $rowId)
         use ($request) {
             return $cartItem->id == $request->id;
         });
-        if ($duplicata->isNotEmpty()) {
+        if ($duplicate->isNotEmpty()) {
             return redirect()->route('shop')->with('success', 'The product has already been added.');
         }
 
         $product = Product::find($request->id);
-        
+
         Cart::add($product->id, $product->title, $request->qty, $product->price)
             ->associate('App\Models\Product');
         return redirect()->route('cart')->with('success', 'The product has been added.');
@@ -80,10 +82,23 @@ class CartController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $rowId)
     {
-        //
+        $data = $request->json()->all();
+        $stock = Cart::get($rowId)->model->stock;
+        $validates = Validator::make($request->all(), [
+            'qty' => 'numeric|required', //between:1,5
+        ]);
+
+        if ($validates->fails() || ($request->qty > $stock)) {
+            Session::flash('error', 'the available quantity is ' . $stock);
+            return response()->json(['error' => 'Cart Quantity Has Not Been Updated']);
+        }
+        Cart::update($rowId,  $data['qty']);
+        Session::flash('success', 'Cart quantity has been updated to ' . $data['qty'] . '.');
+        return response()->json(['success' => 'Cart quantity has been updated']);
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -94,6 +109,6 @@ class CartController extends Controller
     public function destroy($rowId)
     {
         Cart::remove($rowId);
-        return back()->with('success','The item has been removed.');
+        return back()->with('success', 'The item has been removed.');
     }
 }

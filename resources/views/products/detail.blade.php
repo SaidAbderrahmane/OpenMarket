@@ -43,13 +43,11 @@
           @method('POST')
           @csrf
           <div class="row align-items-stretch mb-4">
-            <div class="col-sm-5 pr-sm-0">
+            <div class="col-sm-4 pr-sm-0">
               <div class="border d-flex align-items-center justify-content-between py-1 px-3 bg-white border-white">
                 <span class="small text-uppercase text-gray mr-4 no-select">Quantity</span>
                 <div class="quantity">
-                  <button type="button" class="dec-btn p-0"><i class="fas fa-caret-left"></i></button>
-                  <input name='qty' class="form-control border-0 shadow-0 p-0" type="text" value="1">
-                  <button type="button" class="inc-btn p-0"><i class="fas fa-caret-right"></i></button>
+                  <input name='qty' class="form-control form-control-md border-0 shadow-0 p-0" type="number" min="1" max="8" value="1">
                 </div>
               </div>
             </div>
