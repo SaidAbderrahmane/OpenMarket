@@ -20,7 +20,7 @@ class Category extends Model
 
     
     public function products (){
-        return $this->hasMany(Product::class,'id','id');
+        return $this->belongsToMany(Product::class,'id','id');
     }
         
     public function subcategories (){

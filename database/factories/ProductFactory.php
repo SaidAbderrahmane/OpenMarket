@@ -30,5 +30,6 @@ class ProductFactory extends Factory
             'stock' => $this->faker->numberBetween(1,20),    
             'image' => "https://via.placeholder.com/350x150"
         ];
+        
     }
 }

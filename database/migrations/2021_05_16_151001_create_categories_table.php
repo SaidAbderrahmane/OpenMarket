@@ -15,10 +15,11 @@ class CreateCategoriesTable extends Migration
     public function up()
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name',50);
-            $table->string('image');
-            $table->integer('parentid')->nullable()->unsigned()->default(null);
+            $table->id();
+            $table->string('name');
+            $table->string('slug');
+          //  $table->string('image');
+            $table->unsignedBigInteger('parentid')->nullable()->default(null);
             $table->foreign('parentid')->references('id')->on('categories')->onDelete('set Null');
             $table->timestamps();
         });
@@ -32,5 +33,5 @@ class CreateCategoriesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('categories');
-    }
+    } 
 }

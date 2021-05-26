@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Categories;
+use App\Models\Category;
 use App\Models\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
 
@@ -11,9 +12,17 @@ class ProductsController extends Controller
 {
     public function index()
     {
-        $products = Product::all();
+        if (request()->category) {
+            $products = Product::with('categories')->whereHas('categories', function ($query) {
+                $query->where('slug', request()->category);
+            })->paginate(12);
+        } else {
+            $products = Product::with('categories')->paginate(12);
+        }
+        $categories = Category::all();
         return view('products.shop', [
-            'products' => $products
+            'products' => $products,
+            'categories' => $categories
         ]);
     }
 

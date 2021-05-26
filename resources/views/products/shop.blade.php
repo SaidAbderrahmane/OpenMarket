@@ -18,14 +18,11 @@
         <!-- SHOP SIDEBAR-->
         <div class="col-lg-3 order-2 order-lg-1">
           <h5 class="text-uppercase mb-4">Categories</h5>
-          <div class="py-2 px-4 bg-dark text-white mb-3"><strong class="small text-uppercase font-weight-bold">Fashion &amp; Acc</strong></div>
+          <div class="py-2 px-4 bg-dark text-white mb-3"><strong class="small text-uppercase font-weight-bold">Parent Category</strong></div>
           <ul class="list-unstyled small text-muted pl-lg-4 font-weight-normal">
-            <li class="mb-2"><a class="reset-anchor" href="#">Women's T-Shirts</a></li>
-            <li class="mb-2"><a class="reset-anchor" href="#">Men's T-Shirts</a></li>
-            <li class="mb-2"><a class="reset-anchor" href="#">Dresses</a></li>
-            <li class="mb-2"><a class="reset-anchor" href="#">Novelty socks</a></li>
-            <li class="mb-2"><a class="reset-anchor" href="#">Women's sunglasses</a></li>
-            <li class="mb-2"><a class="reset-anchor" href="#">Men's sunglasses</a></li>
+            @foreach ($categories as $category)
+            <li class="mb-2"><a class="reset-anchor" href="{{ route('shop',['category' => $category->slug]) }}">{{ $category->name }}</a></li>
+            @endforeach
           </ul>
           <h6 class="text-uppercase mb-4">Price range</h6>
           <div class="price-range pt-4 mb-5">
@@ -103,9 +100,10 @@
             @foreach ($products as $product)
             @include('products.product')
             @endforeach
-
-            <!-- PAGINATION-->
-            <nav aria-label="Page navigation example">
+          </div>
+          <!-- PAGINATION-->
+          {{ $products->appends(request()->input())->links()}}
+          <!-- <nav aria-label="Page navigation example">
               <ul class="pagination justify-content-center justify-content-lg-end">
                 <li class="page-item"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
                 <li class="page-item active"><a class="page-link" href="#">1</a></li>
@@ -113,8 +111,8 @@
                 <li class="page-item"><a class="page-link" href="#">3</a></li>
                 <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
               </ul>
-            </nav>
-          </div>
+            </nav> -->
+
         </div>
       </div>
   </section>
@@ -122,7 +120,7 @@
 @include('layouts.jsFiles')
 @endsection
 @section('extra-js')
-  <!-- Nouislider Config-->
+<!-- Nouislider Config-->
 <script>
   var range = document.getElementById('range');
   noUiSlider.create(range, {
