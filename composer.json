@@ -2,7 +2,10 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
@@ -13,7 +16,8 @@
         "laravel/framework": "^8.12",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.2",
-        "stripe/stripe-php": "^7.79"
+        "stripe/stripe-php": "^7.79",
+        "tcg/voyager": "^1.4"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -29,7 +33,9 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         },
-        "files": ["app/Helpers.php"]
+        "files": [
+            "app/Helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
@@ -59,5 +65,11 @@
         "sort-packages": true
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": {
+        "hooks": {
+            "type": "composer",
+            "url": "https://larapack.io"
+        }
+    }
 }

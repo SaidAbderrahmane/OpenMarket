@@ -18,12 +18,15 @@
         <!-- SHOP SIDEBAR-->
         <div class="col-lg-3 order-2 order-lg-1">
           <h5 class="text-uppercase mb-4">Categories</h5>
-          <div class="py-2 px-4 bg-dark text-white mb-3"><strong class="small text-uppercase font-weight-bold">Parent Category</strong></div>
+          @foreach ($categories as $category)
+          <a class="reset-anchor" href="{{ route('shop',['category' => $category->slug]) }}">
+          <div class="py-2 px-4 bg-dark text-white mb-3"><strong class="small text-uppercase font-weight-bold">{{ $category->name }}</strong></div></a>
           <ul class="list-unstyled small text-muted pl-lg-4 font-weight-normal">
-            @foreach ($categories as $category)
-            <li class="mb-2"><a class="reset-anchor" href="{{ route('shop',['category' => $category->slug]) }}">{{ $category->name }}</a></li>
+            @foreach ($category->subcategories as $subcategory)
+            <li class="mb-2"><a class="reset-anchor" href="{{ route('shop',['category' => $subcategory->slug]) }}">{{ $subcategory->name }}</a></li>
             @endforeach
           </ul>
+          @endforeach
           <h6 class="text-uppercase mb-4">Price range</h6>
           <div class="price-range pt-4 mb-5">
             <div id="range"></div>

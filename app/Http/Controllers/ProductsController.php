@@ -15,9 +15,9 @@ class ProductsController extends Controller
         if (request()->category) {
             $products = Product::with('categories')->whereHas('categories', function ($query) {
                 $query->where('slug', request()->category);
-            })->paginate(12);
+            })->orderBy('created_at','DESC')->paginate(12);
         } else {
-            $products = Product::with('categories')->paginate(12);
+            $products = Product::with('categories')->orderBy('created_at','DESC')->paginate(12);
         }
         $categories = Category::all();
         return view('products.shop', [

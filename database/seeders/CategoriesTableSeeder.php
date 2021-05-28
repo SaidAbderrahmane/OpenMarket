@@ -19,20 +19,12 @@ class CategoriesTableSeeder extends Seeder
             'slug' => 'high-tech'
         ]);
         Category::create([
-            'name' => 'Livres',
-            'slug' => 'livres'
+            'name' => 'Books',
+            'slug' => 'books'
         ]);
         Category::create([
-            'name' => 'Meubles',
-            'slug' => 'meubles'
-        ]);
-        Category::create([
-            'name' => 'Jeux',
-            'slug' => 'jeux'
-        ]);
-        Category::create([
-            'name' => 'Nourriture',
-            'slug' => 'nourriture'
+            'name' => 'Fashion',
+            'slug' => 'fashion'
         ]);
     }
 }

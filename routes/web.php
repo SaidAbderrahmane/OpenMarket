@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
+
 Auth::routes();
 
 //products
@@ -42,3 +43,8 @@ Route::delete('/cart/{rowId}', 'App\Http\Controllers\CartController@destroy')->n
 Route::get('/checkout', 'App\Http\Controllers\CheckoutController@index')->name('checkout');
 Route::post('/checkout', 'App\Http\Controllers\CheckoutController@store')->name('checkout.store');
 Route::get('/thankyou', 'App\Http\Controllers\CheckoutController@thankyou');
+
+//voyager
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
+});
