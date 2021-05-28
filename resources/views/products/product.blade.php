@@ -1,7 +1,7 @@
 <!-- PRODUCT-->
-<div class="col-xl-3 col-lg-4 col-sm-6">
+<div class="col-lg-4 col-sm-6">
     <div class="product text-center">
-        <div class="position-relative mb-3 p-5">
+        <div class="mb-3 position-relative">
             <div class="row justify-content-center">
                 <p class="small text-muted">
                     @foreach ($product->categories as $category)
@@ -30,3 +30,4 @@
         <p class="small text-muted">{{ $product->getPrice() }}</p>
     </div>
 </div>
+

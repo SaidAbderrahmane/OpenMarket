@@ -15,9 +15,9 @@ class ProductsController extends Controller
         if (request()->category) {
             $products = Product::with('categories')->whereHas('categories', function ($query) {
                 $query->where('slug', request()->category);
-            })->orderBy('created_at','DESC')->paginate(12);
+            })->orderBy('created_at', 'DESC')->paginate(12);
         } else {
-            $products = Product::with('categories')->orderBy('created_at','DESC')->paginate(12);
+            $products = Product::with('categories')->orderBy('created_at', 'DESC')->paginate(12);
         }
         $categories = Category::all();
         return view('products.shop', [
@@ -34,6 +34,26 @@ class ProductsController extends Controller
         return view('products.detail', [
             'product' => $product ?? 'product ' . $slug . ' does not exist',
             'products' => $products
+        ]);
+    }
+
+    public function search()
+    {
+        request()->validate([
+            'q' => 'required|min:3'
+        ]);
+
+        $q = request()->input('q');
+
+        $products = Product::where('title', 'like', "%$q%")
+            ->orWhere('description', 'like', "%$q%")
+            ->orderBy('created_at', 'DESC')
+            ->paginate(12);
+
+        $categories = Category::all();
+        return view('products.shop', [
+            'products' => $products,
+            'categories' => $categories
         ]);
     }
 }

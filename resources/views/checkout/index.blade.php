@@ -6,7 +6,7 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('content')
-<div class="container">
+
     <!-- HERO SECTION-->
     <section class="py-5 bg-light">
         <div class="container">
