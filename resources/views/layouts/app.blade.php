@@ -77,6 +77,6 @@
   </div>
 </body>
 @include('layouts.footer')
-@yield('extra-js')
 
+@yield('extra-js')
 </html>

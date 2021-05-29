@@ -5,6 +5,7 @@ use App\Http\Controllers\ProductsController;
 use App\Models\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,15 +36,24 @@ Route::resource('/dashboard/categories', App\Http\Controllers\CategoriesControll
 Route::view('/dashboard/products', 'dashboard.products')->name('products');
 
 //cart
-Route::post('/cart/add','App\Http\Controllers\CartController@store')->name('cart.store');
-Route::get('/cart', 'App\Http\Controllers\CartController@index')->name('cart');
-Route::patch('/cart/{rowId}', 'App\Http\Controllers\CartController@update')->name('cart.update');
-Route::delete('/cart/{rowId}', 'App\Http\Controllers\CartController@destroy')->name('cart.delete');
+Route::middleware(['auth'])->group(function () {
 
-//checkout
-Route::get('/checkout', 'App\Http\Controllers\CheckoutController@index')->name('checkout');
-Route::post('/checkout', 'App\Http\Controllers\CheckoutController@store')->name('checkout.store');
-Route::get('/thankyou', 'App\Http\Controllers\CheckoutController@thankyou');
+    Route::post('/cart/add', 'App\Http\Controllers\CartController@store')->name('cart.store');
+    Route::get('/cart', 'App\Http\Controllers\CartController@index')->name('cart');
+    Route::patch('/cart/{rowId}', 'App\Http\Controllers\CartController@update')->name('cart.update');
+    Route::delete('/cart/{rowId}', 'App\Http\Controllers\CartController@destroy')->name('cart.delete');
+
+    //checkout
+    Route::get('/checkout', 'App\Http\Controllers\CheckoutController@index')->name('checkout');
+    Route::post('/checkout', 'App\Http\Controllers\CheckoutController@store')->name('checkout.store');
+    Route::get('/thankyou', 'App\Http\Controllers\CheckoutController@thankyou');
+
+    //orders
+    Route::get('/myorders', function () {
+        return view('orders');
+    })->name('myorders');
+});
+
 
 //voyager
 Route::group(['prefix' => 'admin'], function () {

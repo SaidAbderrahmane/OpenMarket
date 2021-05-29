@@ -46,7 +46,7 @@
             @foreach (Cart::content() as $product)
             <tr>
               <th class="pl-0 border-0" scope="row">
-                <div class="media align-items-center"><a class="reset-anchor d-block animsition-link" href="/products/{{ $product->model->slug }}"><img src="{{ $product->model->image }}" alt="..." width="70" /></a>
+                <div class="media align-items-center"><a class="reset-anchor d-block animsition-link" href="/products/{{ $product->model->slug }}"><img src="{{ asset('storage/'.$product->model->image) }}" alt="..." width="70" /></a>
                   <div class="media-body ml-3"><strong class="h6"><a class="reset-anchor animsition-link" href="/products/{{ $product->model->slug }}">{{ $product->model->title }}</a></strong></div>
                 </div>
               </th>

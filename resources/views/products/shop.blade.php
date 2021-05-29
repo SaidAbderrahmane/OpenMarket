@@ -27,9 +27,11 @@
       <div class="col-lg-3 order-2 order-lg-1">
         <h5 class="text-uppercase mb-4">Categories</h5>
         @foreach ($categories as $category)
+        @if ($category->parent === null)
         <a class="reset-anchor" href="{{ route('shop',['category' => $category->slug]) }}">
           <div class="py-2 px-4 bg-dark text-white mb-3"><strong class="small text-uppercase font-weight-bold">{{ $category->name }}</strong></div>
         </a>
+        @endif
         <ul class="list-unstyled small text-muted pl-lg-4 font-weight-normal">
           @foreach ($category->subcategories as $subcategory)
           <li class="mb-2"><a class="reset-anchor" href="{{ route('shop',['category' => $subcategory->slug]) }}">{{ $subcategory->name }}</a></li>
