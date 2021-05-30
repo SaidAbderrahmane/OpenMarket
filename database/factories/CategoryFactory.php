@@ -24,7 +24,7 @@ class CategoryFactory extends Factory
         return [
             'name' => $this->faker->sentence(1),
             'parentid' => null,//$this->faker->numberBetween(15,300)*100,    
-            'image' => "1621421244-cat1.jpg"
+            //'image' => "1621421244-cat1.jpg"
         ];
     }
 }

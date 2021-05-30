@@ -22,13 +22,14 @@ class ProductFactory extends Factory
     public function definition()
     {
         return [
-            'title' => $this->faker->sentence(1),
+            'title' => $this->faker->unique()->sentence(1),
             'slug' => $this->faker->slug,    
             'subtitle' => $this->faker->sentence(2),    
             'description' => $this->faker->text,
             'price' => $this->faker->numberBetween(15,300)*100,    
             'stock' => $this->faker->numberBetween(1,20),    
-            'image' => "https://via.placeholder.com/350x150"
+            'image' => 'products/'.$this->faker->image('public/storage/products',640,480, null, false),
+            
         ];
         
     }
