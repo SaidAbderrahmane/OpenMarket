@@ -10,18 +10,21 @@
           <div class="col-sm-2 p-sm-0 order-2 order-sm-1 mt-2 mt-sm-0">
             <div class="owl-thumbs d-flex flex-row flex-sm-column" data-slider-id="1">
               <div class="owl-thumb-item flex-fill mb-2 mr-2 mr-sm-0"><img class="w-100" src="{{ asset('storage/'.$product->image) }}" alt="..."></div>
-              <div class="owl-thumb-item flex-fill mb-2 mr-2 mr-sm-0"><img class="w-100" src="{{ asset('storage/'.$product->image) }}" alt="..."></div>
-              <div class="owl-thumb-item flex-fill mb-2 mr-2 mr-sm-0"><img class="w-100" src="{{ asset('storage/'.$product->image) }}" alt="..."></div>
-              <div class="owl-thumb-item flex-fill mb-2"><img class="w-100" src="{{ asset('storage/'.$product->image) }}" alt="...">
-              </div>
+              @if ($product->images)
+              @foreach (json_decode($product->images,true) as $image )
+              <div class="owl-thumb-item flex-fill mb-2 mr-2 mr-sm-0"><img class="w-100" src="{{ asset('storage/'.$image) }}" alt="..."></div>
+              @endforeach
+              @endif
             </div>
           </div>
           <div class="col-sm-10 order-1 order-sm-2">
             <div class="owl-carousel product-slider" data-slider-id="1">
               <a class="d-block" href="{{ asset('storage/'.$product->image) }}" data-lightbox="product" title="Product item 1"><img class="img-fluid" src="{{ asset('storage/'.$product->image) }}" alt="..."></a>
-              <a class="d-block" href="{{ asset('storage/'.$product->image) }}" data-lightbox="product" title="Product item 2"><img class="img-fluid" src="{{ asset('storage/'.$product->image) }}" alt="..."></a>
-              <a class="d-block" href="{{ asset('storage/'.$product->image) }}" data-lightbox="product" title="Product item 3"><img class="img-fluid" src="{{ asset('storage/'.$product->image) }}" alt="..."></a>
-              <a class="d-block" href="{{ asset('storage/'.$product->image) }}" data-lightbox="product" title="Product item 4"><img class="img-fluid" src="{{ asset('storage/'.$product->image) }}" alt="..."></a>
+              @if ($product->images)
+              @foreach (json_decode($product->images,true) as $image )
+              <a class="d-block" href="{{ asset('storage/'.$image) }}" data-lightbox="product" title="Product item 1"><img class="img-fluid" src="{{ asset('storage/'.$image) }}" alt="..."></a>
+              @endforeach
+              @endif
             </div>
           </div>
         </div>

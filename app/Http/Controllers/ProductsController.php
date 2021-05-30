@@ -14,7 +14,16 @@ class ProductsController extends Controller
     {
         if (request()->category) {
             $products = Product::with('categories')->whereHas('categories', function ($query) {
-                $query->where('slug', request()->category);
+                $query->where('slug', request()->category)
+                    ->orWhereIn('slug', function ($query) {
+                        $query->from("categories")
+                        ->select('slug')
+                        ->where("parentid", "=", function ($query) {
+                            $query->from("categories")
+                                ->select("id")
+                                ->where("slug", "=", request()->category);
+                        });
+                    });
             })->orderBy('created_at', 'DESC')->paginate(12);
         } else {
             $products = Product::with('categories')->orderBy('created_at', 'DESC')->paginate(12);
