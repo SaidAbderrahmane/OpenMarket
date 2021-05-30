@@ -11,6 +11,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Models\Order;
+use App\Models\Product;
 
 class CheckoutController extends Controller
 {
@@ -59,6 +60,10 @@ class CheckoutController extends Controller
      */
     public function store(Request $request)
     {
+        if ($this->isNotAvailable()) {    //check if the ordered qty is still available
+            $request->session()->flash('error', 'a product from your cart is not available anymore.');
+            return response()->json(['success' => false],400);
+        }
         $data = $request->json()->all();
         $order = new Order();
         $order->payment_intent_id = $data['paymentIntent']['id'];
@@ -79,6 +84,7 @@ class CheckoutController extends Controller
         $order->user_id = Auth::user()->id;
         $order->save();
         if ($data['paymentIntent']['status'] === 'succeeded') {
+            $this->updateStock();
             Cart::destroy();
             Session::flash('success', 'Your order has been added successfully!');
             return response()->json(['success' => 'payment Intent Succeeded']);
@@ -134,5 +140,24 @@ class CheckoutController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    private function isNotAvailable()
+    {
+        foreach (Cart::content() as $item) {
+            $product = Product::find($item->model->id);
+
+            if ($product->stock < $item->qty) {
+                return true;
+            }
+        }
+    }
+
+    private function updateStock()
+    {
+        foreach (Cart::content() as $item) {
+            $product = Product::find($item->model->id);
+            $product->update(['stock' => $product->stock - $item->qty]);
+        }
     }
 }

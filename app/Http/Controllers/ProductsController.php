@@ -39,10 +39,12 @@ class ProductsController extends Controller
     {
         $products = Product::all();
         $product = Product::where('slug', '=', $slug)->firstOrFail();
+        $stock = $product->stock === 0 ? 'Unavailable' : 'Available';
 
         return view('products.detail', [
-            'product' => $product ?? 'product ' . $slug . ' does not exist',
-            'products' => $products
+            'product' => $product,
+            'products' => $products,
+            'stock' => $stock
         ]);
     }
 

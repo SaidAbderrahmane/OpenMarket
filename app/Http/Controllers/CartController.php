@@ -47,7 +47,15 @@ class CartController extends Controller
         }
 
         $product = Product::find($request->id);
+        $stock = $product->stock;
+        $validates = Validator::make($request->all(), [
+            'qty' => 'numeric|required|min:1', //between:1,5
+        ]);
 
+        if ($validates->fails() || ($request->qty > $stock)) {
+            if ($stock === 0) return back()->with('error', 'the product is currently unavailable');
+            return back()->with('error', 'the quantity is unavailable');
+        }
         Cart::add($product->id, $product->title, $request->qty, $product->price)
             ->associate('App\Models\Product');
         return redirect()->route('cart')->with('success', 'The product has been added.');
@@ -87,11 +95,11 @@ class CartController extends Controller
         $data = $request->json()->all();
         $stock = Cart::get($rowId)->model->stock;
         $validates = Validator::make($request->all(), [
-            'qty' => 'numeric|required', //between:1,5
+            'qty' => 'numeric|required|min:1', //between:1,5
         ]);
 
         if ($validates->fails() || ($request->qty > $stock)) {
-            Session::flash('error', 'the available quantity is '.$stock);
+            Session::flash('error', 'the required quantity is unvailable' . $stock);
             return response()->json(['error' => 'Cart Quantity Has Not Been Updated']);
         }
         Cart::update($rowId,  $data['qty']);

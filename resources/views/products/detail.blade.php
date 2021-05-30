@@ -41,7 +41,7 @@
         <h1>{{ $product->title }}</h1>
         <p class="text-muted lead">{{ $product->getPrice() }}</p>
         <p class="text-small mb-4">{{ $product->subtitle }}</p>
-
+        @if ($stock === 'Available')
         <form action="{{ route('cart.store') }}" method="POST">
           @method('POST')
           @csrf
@@ -50,7 +50,7 @@
               <div class="border d-flex align-items-center justify-content-between py-1 px-3 bg-white border-white">
                 <span class="small text-uppercase text-gray mr-4 no-select">Quantity</span>
                 <div class="quantity">
-                  <input name='qty' class="form-control form-control-md border-0 shadow-0 p-0" type="number" min="1" max="8" value="1">
+                  <input name='qty' class="form-control form-control-md border-0 shadow-0 p-0" type="number" min="1" max="100" value="1">
                 </div>
               </div>
             </div>
@@ -60,12 +60,17 @@
             </div>
           </div>
         </form>
+        @endif
         <a class="btn btn-link text-dark p-0 mb-4" href="#"><i class="far fa-heart mr-2"></i>Add to wish
           list</a><br>
         <ul class="list-unstyled small d-inline-block">
-          <li class="px-3 py-2 mb-1 bg-white"><strong class="text-uppercase">SKU:</strong><span class="ml-2 text-muted">039</span></li>
-          <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">Category:</strong><a class="reset-anchor ml-2" href="#"> {{ $product->categoryid }}</a></li>
+          <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">Categories:</strong>
+            @foreach ( $product->categories as $category)
+            <a class="reset-anchor ml-2" href="{{ route('shop',['category'=> $category->slug]) }}"> {{ $category->name}} {{ $loop->last ? '' : ', '}}</a>
+            @endforeach
+          </li>
           <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">Tags:</strong><a class="reset-anchor ml-2" href="#">Innovation</a></li>
+          <div class="badge badge-pill badge-info">{{ $stock }}</div>
         </ul>
       </div>
     </div>

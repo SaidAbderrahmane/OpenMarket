@@ -7,57 +7,57 @@
 @endsection
 @section('content')
 
-    <!-- HERO SECTION-->
-    <section class="py-5 bg-light">
-        <div class="container">
-            <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
-                <div class="col-lg-6">
-                    <h1 class="h2 text-uppercase mb-0">Checkout</h1>
-                </div>
-                <div class="col-lg-6 text-lg-right">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb justify-content-lg-end mb-0 px-0">
-                            <li class="breadcrumb-item"><a href="{{ route('shop') }}">Home</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('cart') }}">Cart</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Checkout</li>
-                        </ol>
-                    </nav>
-                </div>
+<!-- HERO SECTION-->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
+            <div class="col-lg-6">
+                <h1 class="h2 text-uppercase mb-0">Checkout</h1>
+            </div>
+            <div class="col-lg-6 text-lg-right">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-lg-end mb-0 px-0">
+                        <li class="breadcrumb-item"><a href="{{ route('shop') }}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('cart') }}">Cart</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+                    </ol>
+                </nav>
             </div>
         </div>
-    </section>
-    <section class="py-5">
-        <!-- CARD INFO -->
-        <h2 class="h5 text-uppercase mb-4">Payment details</h2>
+    </div>
+</section>
+<section class="py-5">
+    <!-- CARD INFO -->
+    <h2 class="h5 text-uppercase mb-4">Payment details</h2>
 
-        <div class="row justify-content-center p-5">
-            <div class="col-xl-10">
-                <form action=" {{ route('checkout.store') }}" method="POST" id="payment-form">
-                    <div class="row">
-                        <div id="card-element" class="col-lg-8 form-group">
-                            <!-- <label class="text-small text-uppercase" for="address">Card number</label>
+    <div class="row justify-content-center p-5">
+        <div class="col-xl-10">
+            <form action=" {{ route('checkout.store') }}" method="POST" id="payment-form">
+                <div class="row">
+                    <div id="card-element" class="col-lg-8 form-group">
+                        <!-- <label class="text-small text-uppercase" for="address">Card number</label>
                             <input class="form-control form-control-lg" id="address" type="text" placeholder="Card number">
                         </div>
                         <div class="col-sm-4 form-group">
                             <label class="text-small text-uppercase" for="address">ZIP Code</label>
                             <input class="form-control form-control-lg" id="address" type="text" maxlength="5" placeholder="Card number"> -->
-                        </div>
                     </div>
-                    <div class="row">
-                        <div id="card-errors"></div>
+                </div>
+                <div class="row">
+                    <div id="card-errors"></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-5 form-group">
+                        <button id="submit" class="btn btn-primary" type="submit">
+                            <span id="spinner" class="spinner-grow d-none spinner-grow-sm" role="status"></span>
+                            <span id="button-text">Pay now</span>
+                        </button>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-5 form-group">
-                            <button id="submit" class="btn btn-primary" type="submit">
-                                <span id="spinner" class="spinner-grow d-none spinner-grow-sm" role="status"></span>
-                                <span id="button-text">Pay now</span>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
-    </section>
+    </div>
+</section>
 </div>
 @include('layouts.jsFiles')
 @endsection
@@ -145,8 +145,11 @@
                             })
                             //when there's a positif return 
                         }).then((data) => {
-                        console.log(data);
-                        form.reset();
+                        if (data.status === 400) { // if the product is not available anymore
+                            redirect = '/products'
+                        }
+                        //console.log(data);
+                        //form.reset();
                         window.location.href = redirect;
 
                     }).catch((error) => { //in case of error

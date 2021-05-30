@@ -22,7 +22,7 @@ class CreateProductsTable extends Migration
         $table->text('description');
         $table->integer('price');
         $table->string('image');
-		$table->integer('stock')->nullable()->default(0);
+		$table->unsignedInteger('stock')->default(0);
         $table->timestamps();
         //$table->bigInteger('category_id')->unsigned()->nullable()->default(NULL);
         // $table->foreign('categoryid')

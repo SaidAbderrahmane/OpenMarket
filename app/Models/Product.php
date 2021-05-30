@@ -16,7 +16,8 @@ class Product extends Model
         'title',
         'subtitle',
         'image',
-        'price'
+        'price',
+        'stock'
     ];
     
     public function getPrice(){
