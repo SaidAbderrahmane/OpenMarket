@@ -27,8 +27,13 @@ class CheckoutController extends Controller
         }
         Stripe::setApiKey('sk_test_51IuDBqFgbAj6W3MWKqTB7UzZXYjcRiRFgcEH3D8piflVmBcHkzw52wLq5QnqL76DSKdg9bclwEaJsxYCyFKzIbzg00ILtQBbNu');
 
+        if (request()->session()->has('coupon')) {  //if a coupon is applied
+            $total = request()->session()->get('coupon')['new_total'];
+        } else {
+            $total = Cart::total();
+        }
         $intent = PaymentIntent::create([
-            'amount' => round(Cart::total()),
+            'amount' => round($total),
             'currency' => 'usd',
             'metadata' => [
                 'userId' => Auth::user()->id
@@ -62,7 +67,7 @@ class CheckoutController extends Controller
     {
         if ($this->isNotAvailable()) {    //check if the ordered qty is still available
             $request->session()->flash('error', 'a product from your cart is not available anymore.');
-            return response()->json(['success' => false],400);
+            return response()->json(['success' => false], 400);
         }
         $data = $request->json()->all();
         $order = new Order();

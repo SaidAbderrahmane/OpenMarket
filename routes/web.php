@@ -35,13 +35,17 @@ Route::view('/dashboard', 'dashboard.index')->name('dashboard');
 Route::resource('/dashboard/categories', App\Http\Controllers\CategoriesController::class);
 Route::view('/dashboard/products', 'dashboard.products')->name('products');
 
-//cart
+
 Route::middleware(['auth'])->group(function () {
 
+    //cart
     Route::post('/cart/add', 'App\Http\Controllers\CartController@store')->name('cart.store');
     Route::get('/cart', 'App\Http\Controllers\CartController@index')->name('cart');
     Route::patch('/cart/{rowId}', 'App\Http\Controllers\CartController@update')->name('cart.update');
     Route::delete('/cart/{rowId}', 'App\Http\Controllers\CartController@destroy')->name('cart.delete');
+    Route::post('/coupon', 'App\Http\Controllers\CouponsController@store')->name('cart.store.coupon');
+    Route::delete('/coupon', 'App\Http\Controllers\CouponsController@destroy')->name('cart.destroy.coupon');
+
 
     //checkout
     Route::get('/checkout', 'App\Http\Controllers\CheckoutController@index')->name('checkout');
@@ -53,7 +57,6 @@ Route::middleware(['auth'])->group(function () {
         return view('orders');
     })->name('myorders');
 });
-
 
 //voyager
 Route::group(['prefix' => 'admin'], function () {

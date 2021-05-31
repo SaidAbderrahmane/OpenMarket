@@ -62,7 +62,7 @@
                 </div>
               </td>
               <td class="align-middle border-0">
-                <p class="mb-0 small">{{ $product->model->getPrice() }}</p>
+                <p class="mb-0 small">{{ getPrice($product->total) }}</p>
               </td>
               <td class="align-middle border-0">
                 <form action="{{ route('cart.delete', $product->rowId) }}" method="POST">
@@ -91,17 +91,38 @@
           <h5 class="text-uppercase mb-4">Cart total</h5>
           <ul class="list-unstyled mb-0">
             <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small font-weight-bold">Subtotal</strong><span class="text-muted small">{{ getPrice(Cart::subtotal()) }}</span></li>
-            <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small font-weight-bold">Tax</strong><span class="text-muted small">{{ getPrice(Cart::tax()) }}</span></li>
+            @if(request()->session()->has('coupon'))
+            <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small font-weight-bold">Coupon [{{ request()->session()->get('coupon')['code'] }}]</strong>
+              <form action="{{ route('cart.destroy.coupon', $product->rowId) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="reset-anchor bg-transparent border-0"><i class="fas fa-times small text-muted"></i></button>
+              </form>
+              <span class="text-muted small">-{{ getPrice(request()->session()->get('coupon')['discount']) }}</span>
+            </li>
+            <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small font-weight-bold">New subtotal</strong><span class="text-muted small">{{ getPrice(request()->session()->get('coupon')['new_subtotal']) }}</span></li>
+            @endif
+            <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small font-weight-bold">Tax</strong><span class="text-muted small">{{ request()->session()->has('coupon') ? getPrice(request()->session()->get('coupon')['new_tax']) : getPrice(Cart::tax()) }}</span></li>
             <li class="border-bottom my-2"></li>
-            <li class="d-flex align-items-center justify-content-between mb-4"><strong class="text-uppercase small font-weight-bold">Total</strong><span>{{ getPrice(Cart::total()) }}</span></li>
+            <li class="d-flex align-items-center justify-content-between mb-4"><strong class="text-uppercase small font-weight-bold">Total</strong><span>{{ request()->session()->has('coupon') ? getPrice(request()->session()->get('coupon')['new_total']) : getPrice(Cart::total()) }}</span></li>
+            @if(!request()->session()->has('coupon'))
+            <!--COUPON-->
             <li>
-              <form action="#">
+              <form action="{{ route('cart.store.coupon') }}" method="POST">
+                @csrf
                 <div class="form-group mb-0">
-                  <input class="form-control" type="text" placeholder="Enter your coupon">
+                  <input class="form-control" type="text" name="code" placeholder="Enter your coupon">
                   <button class="btn btn-dark btn-sm btn-block" type="submit"> <i class="fas fa-gift mr-2"></i>Apply coupon</button>
                 </div>
               </form>
             </li>
+            @else
+            <li>
+              <div class="form-group mb-0">
+                <div class="alert alert-success">A coupon is already applied.</p>
+                </div>
+            </li>
+            @endif
           </ul>
         </div>
       </div>

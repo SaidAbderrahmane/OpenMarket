@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Coupon;
 use App\Models\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
@@ -53,13 +54,14 @@ class CartController extends Controller
         ]);
 
         if ($validates->fails() || ($request->qty > $stock)) {
-            if ($stock === 0) return back()->with('error', 'the product is currently unavailable');
-            return back()->with('error', 'the quantity is unavailable');
+            if ($stock === 0) return back()->with('error', 'the product is currently not available');
+            return back()->with('error', 'the quantity is not available');
         }
         Cart::add($product->id, $product->title, $request->qty, $product->price)
             ->associate('App\Models\Product');
         return redirect()->route('cart')->with('success', 'The product has been added.');
     }
+
 
     /**
      * Display the specified resource.
@@ -99,8 +101,8 @@ class CartController extends Controller
         ]);
 
         if ($validates->fails() || ($request->qty > $stock)) {
-            Session::flash('error', 'the required quantity is unvailable' . $stock);
-            return response()->json(['error' => 'Cart Quantity Has Not Been Updated']);
+            Session::flash('error', 'the required quantity is not available.');
+            return response()->json(['error' => 'Cart quantity Has Not Been Updated']);
         }
         Cart::update($rowId,  $data['qty']);
         Session::flash('success', 'Cart quantity has been updated to ' . $data['qty'] . '.');
