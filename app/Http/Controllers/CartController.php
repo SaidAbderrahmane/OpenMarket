@@ -18,6 +18,7 @@ class CartController extends Controller
      */
     public function index()
     {
+        Cart::instance('shopping');
         return view('cart.cart');
     }
 
@@ -39,12 +40,15 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
+        Cart::instance('shopping');
+
+        //duplication verification
         $duplicate = Cart::search(function ($cartItem, $rowId)
         use ($request) {
             return $cartItem->id == $request->id;
         });
         if ($duplicate->isNotEmpty()) {
-            return redirect()->route('shop')->with('success', 'The product has already been added.');
+            return redirect()->back()->with('success', 'The product has been already added.');
         }
 
         $product = Product::find($request->id);
@@ -52,14 +56,14 @@ class CartController extends Controller
         $validates = Validator::make($request->all(), [
             'qty' => 'numeric|required|min:1', //between:1,5
         ]);
-
+        //qty verification
         if ($validates->fails() || ($request->qty > $stock)) {
             if ($stock === 0) return back()->with('error', 'the product is currently not available');
             return back()->with('error', 'the quantity is not available');
         }
         Cart::add($product->id, $product->title, $request->qty, $product->price)
             ->associate('App\Models\Product');
-        return redirect()->route('cart')->with('success', 'The product has been added.');
+        return redirect()->back()->with('success', 'The product has been added.');
     }
 
 
@@ -94,6 +98,8 @@ class CartController extends Controller
      */
     public function update(Request $request, $rowId)
     {
+        Cart::instance('shopping');
+
         $data = $request->json()->all();
         $stock = Cart::get($rowId)->model->stock;
         $validates = Validator::make($request->all(), [
@@ -118,6 +124,8 @@ class CartController extends Controller
      */
     public function destroy($rowId)
     {
+        Cart::instance('shopping');
+
         Cart::remove($rowId);
         return back()->with('success', 'The item has been removed.');
     }

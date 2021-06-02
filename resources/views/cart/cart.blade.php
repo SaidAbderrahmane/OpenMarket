@@ -5,7 +5,6 @@
 @endsection
 
 @section('content')
-@include('layouts.modal')
 <!-- HERO SECTION-->
 <section class="py-5 bg-light">
   <div class="container">
@@ -85,7 +84,7 @@
       </div>
     </div>
     <!-- ORDER TOTAL-->
-    <divclass="col-lg-4">
+    <div class="col-lg-4">
       <div class="card border-0 rounded-0 p-lg-4 bg-light">
         <div id="totals" class="card-body">
           <h5 class="text-uppercase mb-4">Cart total</h5>
@@ -126,7 +125,7 @@
           </ul>
         </div>
       </div>
-  </div>
+    </div>
 </section>
 
 @else

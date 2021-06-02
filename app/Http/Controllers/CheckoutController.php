@@ -22,6 +22,8 @@ class CheckoutController extends Controller
      */
     public function index()
     {
+        Cart::instance('shopping');
+
         if (Cart::count() <= 0) {
             return redirect()->route('shop');
         }
@@ -65,6 +67,7 @@ class CheckoutController extends Controller
      */
     public function store(Request $request)
     {
+        Cart::instance('shopping');
         if ($this->isNotAvailable()) {    //check if the ordered qty is still available
             $request->session()->flash('error', 'a product from your cart is not available anymore.');
             return response()->json(['success' => false], 400);
@@ -149,6 +152,7 @@ class CheckoutController extends Controller
 
     private function isNotAvailable()
     {
+        Cart::instance('shopping');
         foreach (Cart::content() as $item) {
             $product = Product::find($item->model->id);
 
@@ -160,6 +164,7 @@ class CheckoutController extends Controller
 
     private function updateStock()
     {
+        Cart::instance('shopping');
         foreach (Cart::content() as $item) {
             $product = Product::find($item->model->id);
             $product->update(['stock' => $product->stock - $item->qty]);

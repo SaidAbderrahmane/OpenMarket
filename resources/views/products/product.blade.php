@@ -12,7 +12,13 @@
             <div class="badge text-white badge-"></div><a class="d-block" href="/products/{{ $product->slug }}"><img class="img-fluid w-100" src="{{ asset('storage/'.$product->image) }}" alt="..."></a>
             <div class="product-overlay">
                 <ul class="mb-0 list-inline">
-                    <li class="list-inline-item m-0 p-0"><a class="btn btn-sm btn-outline-dark" href="#"><i class="far fa-heart"></i></a></li>
+                    <li class="list-inline-item m-0 p-0">
+                        <form action="{{ route('wishlist.store') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="id" value="{{ $product->id }}">
+                            <button type="submit" class="btn btn-sm btn-outline-dark"><i class="far fa-heart"></i></button>
+                        </form>
+                    </li>
                     <li class="list-inline-item m-0 p-0">
                         <form action="{{ route('cart.store') }}" method="POST">
                             @csrf
@@ -30,4 +36,3 @@
         <p class="small text-muted">{{ $product->getPrice() }}</p>
     </div>
 </div>
-

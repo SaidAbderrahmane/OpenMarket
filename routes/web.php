@@ -46,6 +46,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/coupon', 'App\Http\Controllers\CouponsController@store')->name('cart.store.coupon');
     Route::delete('/coupon', 'App\Http\Controllers\CouponsController@destroy')->name('cart.destroy.coupon');
 
+    //wishlist
+    Route::post('/wishlist/add', 'App\Http\Controllers\WishlistController@store')->name('wishlist.store');
+    Route::get('/wishlist', 'App\Http\Controllers\WishlistController@index')->name('wishlist');
+    Route::delete('/wishlist/{rowId}', 'App\Http\Controllers\WishlistController@destroy')->name('wishlist.delete');
+
 
     //checkout
     Route::get('/checkout', 'App\Http\Controllers\CheckoutController@index')->name('checkout');

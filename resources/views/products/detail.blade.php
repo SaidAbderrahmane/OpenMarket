@@ -61,8 +61,11 @@
           </div>
         </form>
         @endif
-        <a class="btn btn-link text-dark p-0 mb-4" href="#"><i class="far fa-heart mr-2"></i>Add to wish
-          list</a><br>
+        <form action="{{ route('wishlist.store') }}" method="POST">
+          @csrf
+          <input type="hidden" name="id" value="{{ $product->id }}">
+          <button type="submit" class="btn btn-link text-dark p-0 mb-4"><i class="far fa-heart mr-2"></i>Add to wishlist</button>
+        </form>
         <ul class="list-unstyled small d-inline-block">
           <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">Categories:</strong>
             @foreach ( $product->categories as $category)

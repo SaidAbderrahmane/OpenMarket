@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Coupon;
+use App\Models\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
-class CouponsController extends Controller
+class WishlistController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +17,8 @@ class CouponsController extends Controller
      */
     public function index()
     {
-        //
+        Cart::instance('wishlist');
+        return view('wishlist.wishlist');
     }
 
     /**
@@ -34,24 +37,23 @@ class CouponsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-
     public function store(Request $request)
     {
-        Cart::instance('shopping');
-        $code = $request->get('code');
-        $coupon = Coupon::where('code', $code)->first();
-        if (!$coupon) {
-            return redirect()->back()->with('error', 'Coupon code is invalid.');
+        Cart::instance('wishlist');
+        //duplication verification
+        $duplicate = Cart::search(function ($cartItem, $rowId)
+        use ($request) {
+            return $cartItem->id == $request->id;
+        });
+        if ($duplicate->isNotEmpty()) {
+            return redirect()->back()->with('success', 'The product has been already added to wishlist.');
         }
-        $request->session()->put('coupon', [
-            'code' =>  $coupon->code,
-            'discount' => $coupon->discount(Cart::subtotal()),
-            'new_subtotal' => Cart::subtotal() - $coupon->discount(Cart::subtotal()),
-            'new_tax' => (Cart::subtotal() - $coupon->discount(Cart::subtotal())) * config('cart.tax') / 100,
-            'new_total' => Cart::subtotal() - $coupon->discount(Cart::subtotal()) + (Cart::subtotal() - $coupon->discount(Cart::subtotal())) * config('cart.tax') / 100
-        ]);
-        return redirect()->back()->with('success', 'Coupon code is valid.');
+        $product = Product::find($request->id);
+        Cart::add($product->id, $product->title, 1, $product->price)
+            ->associate('App\Models\Product');
+        return redirect()->back()->with('success', 'The product has been added to wishlist successfully.');
     }
+
     /**
      * Display the specified resource.
      *
@@ -81,7 +83,7 @@ class CouponsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $rowId)
     {
         //
     }
@@ -92,13 +94,10 @@ class CouponsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy()
+    public function destroy($rowId)
     {
-        request()->session()->forget('coupon');
-        return redirect()->back()->with('success', 'The coupon has been removed with success');
-    }
-
-    public function CalculateCoupon()
-    {
+        Cart::instance('wishlist');
+        Cart::remove($rowId);
+        return back()->with('success', 'The item has been removed.');
     }
 }
