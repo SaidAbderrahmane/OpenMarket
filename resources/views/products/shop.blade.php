@@ -46,32 +46,16 @@
             <div class="col-6 text-right"><strong class="small font-weight-bold text-uppercase">To</strong></div>
           </div>
         </div>
+        <div class="row justify-content-center">
+          <a id="apply_range" class="btn btn-dark text-white mb-4">apply</a>
+        </div>
+
         <h6 class="text-uppercase mb-3">Show only</h6>
-        <div class="custom-control custom-checkbox mb-1">
-          <input class="custom-control-input" id="customCheck1" type="checkbox">
-          <label class="custom-control-label text-small" for="customCheck1">Returns Accepted</label>
-        </div>
-        <div class="custom-control custom-checkbox mb-1">
-          <input class="custom-control-input" id="customCheck2" type="checkbox">
-          <label class="custom-control-label text-small" for="customCheck2">Returns Accepted</label>
-        </div>
-        <div class="custom-control custom-checkbox mb-1">
-          <input class="custom-control-input" id="customCheck3" type="checkbox">
-          <label class="custom-control-label text-small" for="customCheck3">Completed Items</label>
-        </div>
-        <div class="custom-control custom-checkbox mb-1">
-          <input class="custom-control-input" id="customCheck4" type="checkbox">
-          <label class="custom-control-label text-small" for="customCheck4">Sold Items</label>
-        </div>
-        <div class="custom-control custom-checkbox mb-1">
-          <input class="custom-control-input" id="customCheck5" type="checkbox">
-          <label class="custom-control-label text-small" for="customCheck5">Deals &amp; Savings</label>
-        </div>
         <div class="custom-control custom-checkbox mb-4">
-          <input class="custom-control-input" id="customCheck6" type="checkbox">
-          <label class="custom-control-label text-small" for="customCheck6">Authorized Seller</label>
+          <input class="custom-control-input" id="available" type="checkbox">
+          <label class="custom-control-label text-small" for="available">Available items</label>
         </div>
-        <h6 class="text-uppercase mb-3">Buying format</h6>
+        <!-- <h6 class="text-uppercase mb-3">Buying format</h6>
         <div class="custom-control custom-radio">
           <input class="custom-control-input" id="customRadio1" type="radio" name="customRadio">
           <label class="custom-control-label text-small" for="customRadio1">All Listings</label>
@@ -87,33 +71,31 @@
         <div class="custom-control custom-radio">
           <input class="custom-control-input" id="customRadio4" type="radio" name="customRadio">
           <label class="custom-control-label text-small" for="customRadio4">Buy It Now</label>
-        </div>
+        </div> -->
       </div>
       <!-- SHOP LISTING-->
       <div class="col-lg-9 order-1 order-lg-2 mb-5 mb-lg-0">
         <div class="row mb-3 align-items-center">
           <div class="col-sm-3 mb-2 mb-lg-0">
             @if (request()->input('q'))
-            <p class="text-small text-muted mb-0">Showing 1–12 of {{ $products->total() }} of the results of the searched product {{ request()->q }}</p>
+            <p class="text-small text-muted mb-0">Showing 1–12 of {{ $products->total() }} of: {{ request()->q }}</p>
             @else
             <p class="text-small text-muted mb-0">Showing 1–12 of {{ $products->total() }} results</p>
             @endif
           </div>
           <div class="col-sm-5">
-            <form class="form-inline my-2 my-lg-0" action="{{ route('products.search') }}">
-              <input class="form-control mr-sm-2" type="search" name="q" value="{{ request()->q ?? ''}}" placeholder="Search" aria-label="Search">
+            <form class="form-inline my-2 my-lg-0" action="{{ route('shop') }}">
+              <input class="form-control mr-sm-2" type="search" name="q" value="{{ request()->q ?? ''}}" placeholder="Search" aria-label="Search" required>
               <button class="btn btn-dark reset-anchor" type="submit"><i class="fas fa-search"></i></button>
             </form>
-
           </div>
           <div class="col-sm-4">
             <ul class="list-inline d-flex align-items-center justify-content-lg-end mb-0">
-              <li class="list-inline-item text-muted mr-3"><a class="reset-anchor p-0" href="#"><i class="fas fa-th-large"></i></a></li>
-              <li class="list-inline-item text-muted mr-3"><a class="reset-anchor p-0" href="#"><i class="fas fa-th"></i></a></li>
+              <!-- <li class="list-inline-item text-muted mr-3"><a class="reset-anchor p-0" href="{{ route('shop',['order'=>'low-high']) }}">Price: Low to High</a></li> -->
+              <!--  <li class="list-inline-item text-muted mr-3"><a class="reset-anchor p-0" href="#"><i class="fas fa-th"></i></a></li> -->
               <li class="list-inline-item">
-                <select class="selectpicker ml-auto" name="sorting" data-width="200" data-style="bs-select-form-control" data-title="Default sorting">
-                  <option value="default">Default sorting</option>
-                  <option value="popularity">Popularity</option>
+                <select class="selectpicker ml-auto" id="sorting" name="sorting" data-width="200" data-style="bs-select-form-control" data-title="Default sorting">
+                  <option value="date" selected>Date</option>
                   <option value="low-high">Price: Low to High</option>
                   <option value="high-low">Price: High to Low</option>
                 </select>
@@ -125,7 +107,11 @@
           @foreach ($products as $product)
           @include('products.product')
           @endforeach
+          <!-- in case of no results -->
         </div>
+        @if($products->total()===0)
+        <div class="alert alert-info">no results to show</div>
+        @endif
         <!-- PAGINATION-->
         {{ $products->appends(request()->input())->links()}}
         <!-- <nav aria-label="Page navigation example">
@@ -146,6 +132,16 @@
 @include('layouts.jsFiles')
 <!-- Nouislider Config-->
 <script>
+  var sortBy = document.getElementById('sorting')
+  sortBy.addEventListener('change', sortedBy, false);
+
+  function sortedBy() {
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.set('order', sortBy.value);
+    window.location.search = urlParams;
+  }
+</script>
+<script>
   var range = document.getElementById('range');
   noUiSlider.create(range, {
     range: {
@@ -162,12 +158,35 @@
     tooltips: true,
     format: {
       to: function(value) {
-        return '$' + value;
+        return value;
       },
       from: function(value) {
         return value.replace('', '');
       }
     }
   });
+
+  const urlParams = new URLSearchParams(window.location.search);
+  //initiaize filters values
+  range.noUiSlider.set(JSON.parse(urlParams.get('price_range')));
+  available = document.getElementById('available');
+  available.checked = urlParams.get('available') == 'true';
+  var apply_range = document.getElementById('apply_range');
+  apply_range.addEventListener('click', applyRange, false);
+  available.addEventListener('change', applyShowOnly, false);
+
+  //apply filters
+
+  //price range
+  function applyRange() {
+    urlParams.set('price_range', JSON.stringify(range.noUiSlider.get()));
+    //console.log(JSON.stringify(range.noUiSlider.get()), available.value);
+    window.location.search = urlParams;
+  }
+  //show only
+  function applyShowOnly() {
+    urlParams.set('available', available.checked);
+    window.location.search = urlParams;
+  }
 </script>
 @endsection

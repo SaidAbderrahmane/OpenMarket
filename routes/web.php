@@ -24,7 +24,7 @@ Auth::routes();
 //products
 Route::get('/products', 'App\Http\Controllers\ProductsController@index')->name('shop');
 Route::get('/products/{slug}', 'App\Http\Controllers\ProductsController@details')->where('slug', '^[a-z][-\.a-z0-9]*')->name('detail');
-Route::get('/search', 'App\Http\Controllers\ProductsController@search')->name('products.search');
+//Route::get('/search', 'App\Http\Controllers\ProductsController@search')->name('products.search');
 //auth
 Route::get('/   ', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
