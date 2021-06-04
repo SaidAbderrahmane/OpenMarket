@@ -34,13 +34,47 @@
         <div class="col-xl-10">
             <form action=" {{ route('checkout.store') }}" method="POST" id="payment-form">
                 <div class="row">
-                    <div id="card-element" class="col-lg-8 form-group">
-                        <!-- <label class="text-small text-uppercase" for="address">Card number</label>
-                            <input class="form-control form-control-lg" id="address" type="text" placeholder="Card number">
-                        </div>
-                        <div class="col-sm-4 form-group">
-                            <label class="text-small text-uppercase" for="address">ZIP Code</label>
-                            <input class="form-control form-control-lg" id="address" type="text" maxlength="5" placeholder="Card number"> -->
+                    <div class="col-lg-6 form-group">
+                        <label class="text-small text-uppercase" for="firstName">First name</label>
+                        <input class="form-control form-control-lg" id="firstName" type="text" placeholder="Enter your first name" required>
+                    </div>
+                    <div class="col-lg-6 form-group">
+                        <label class="text-small text-uppercase" for="lastName">Last name</label>
+                        <input class="form-control form-control-lg" id="lastName" type="text" placeholder="Enter your last name" required>
+                    </div>
+                    <div class="col-lg-6 form-group">
+                        <label class="text-small text-uppercase" for="email">Email address</label>
+                        <input class="form-control form-control-lg" id="email" type="email" placeholder="e.g. Jason@example.com" required>
+                    </div>
+                    <div class="col-lg-6 form-group">
+                        <label class="text-small text-uppercase" for="phone">Phone number</label>
+                        <input class="form-control form-control-lg" id="phone" type="tel" placeholder="e.g. +02 245354745" required>
+                    </div>
+                    <div class="col-lg-6 form-group">
+                        <label class="text-small text-uppercase" for="country">Country</label>
+                        <select class="selectpicker country" id="country" data-width="fit" data-flag="true" data-style="form-control form-control-lg" data-title="Select your country" required></select>
+                    </div>
+                    <div class="col-lg-6 form-group">
+                        <label class="text-small text-uppercase" for="state">State</label>
+                        <input class="form-control form-control-lg" id="state" type="text" required>
+                    </div>
+                    <div class="col-lg-12 form-group">
+                        <label class="text-small text-uppercase" for="address">Address line 1</label>
+                        <input class="form-control form-control-lg" id="address" type="text" placeholder="House number and street name" required>
+                    </div>
+                    <div class="col-lg-12 form-group">
+                        <label class="text-small text-uppercase" for="address">Address line 2</label>
+                        <input class="form-control form-control-lg" id="addressalt" type="text" placeholder="Apartment, Suite, Unit, etc (optional)">
+                    </div>
+                    <div class="col-lg-6 form-group">
+                        <label class="text-small text-uppercase" for="city">Town/City</label>
+                        <input class="form-control form-control-lg" id="city" type="text" required>
+                    </div>
+                    <div class="col-lg-6 form-group">
+                        <label class="text-small text-uppercase" for="postal_code">Postal Code</label>
+                        <input class="form-control form-control-lg" id="postal_code" type="text" pattern="[0-9]{5}" required>
+                    </div>
+                    <div id="card-element" class="col-lg-8 form-group mt-4">
                     </div>
                 </div>
                 <div class="row">
@@ -105,7 +139,20 @@
         submitButton.disabled = true;
         stripe.confirmCardPayment("{{ $clientSecret }}", {
             payment_method: {
-                card: card
+                card: card,
+                billing_details: {
+                    address: {
+                        city: document.getElementById('city').value,
+                        country: document.getElementById('country').value,
+                        line1: document.getElementById('address').value,
+                        line2: document.getElementById('addressalt').value,
+                        postal_code: document.getElementById('postal_code').value,
+                        state: document.getElementById('state').value
+                    },
+                    email: document.getElementById('email').value,
+                    name: document.getElementById('lastName').value + ' ' + document.getElementById('firstName').value,
+                    phone: document.getElementById('phone').value
+                }
             }
         }).then(function(result) {
             if (result.error) {
@@ -130,6 +177,7 @@
                     var url = form.action;
                     var redirect = '/thankyou';
 
+
                     //fetch request for AJAX
                     fetch(
                         url, {
@@ -141,15 +189,26 @@
                             },
                             method: 'post',
                             body: JSON.stringify({ //format passed data 
-                                paymentIntent: paymentIntent
+                                paymentIntent: paymentIntent,
+                                email: document.getElementById('email').value,
+                                name: document.getElementById('lastName').value + ' ' + document.getElementById('firstName').value,
+                                phone: document.getElementById('phone').value,
+                                city: document.getElementById('city').value,
+                                country: document.getElementById('country').value,
+                                line1: document.getElementById('address').value,
+                                line2: document.getElementById('addressalt').value,
+                                postal_code: document.getElementById('postal_code').value,
+                                state: document.getElementById('state').value
                             })
                             //when there's a positif return 
                         }).then((data) => {
                         if (data.status === 400) { // if the product is not available anymore
-                            redirect = '/products'
+                            redirect = '/products';
+                        } else {
+                            redirect = '/thankyou';
                         }
-                        //console.log(data);
-                        //form.reset();
+                        console.log(data);
+                        form.reset();
                         window.location.href = redirect;
 
                     }).catch((error) => { //in case of error

@@ -78,9 +78,9 @@
         <div class="row mb-3 align-items-center">
           <div class="col-sm-3 mb-2 mb-lg-0">
             @if (request()->input('q'))
-            <p class="text-small text-muted mb-0">Showing 1–12 of {{ $products->total() }} of: {{ request()->q }}</p>
+            <p class="text-small text-muted mb-0">Showing 1–{{ $products->total()>=12 ? 12 : $products->total() }} of {{ $products->total() }} of: {{ request()->q }}</p>
             @else
-            <p class="text-small text-muted mb-0">Showing 1–12 of {{ $products->total() }} results</p>
+            <p class="text-small text-muted mb-0">Showing 1–{{ $products->total()>=12 ? 12 : $products->total() }} of {{ $products->total() }} results</p>
             @endif
           </div>
           <div class="col-sm-5">

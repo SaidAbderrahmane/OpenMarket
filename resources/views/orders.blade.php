@@ -37,6 +37,7 @@
                             <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Status</strong></th>
                             <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Payment Method</strong></th>
                             <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Shipping Address</strong></th>
+                            <th class="border-0" style="width: 12%;" scope="col"> <strong class="text-small text-uppercase">Client Info</strong></th>
                             <th class="border-0" scope="col"> </th>
                         </tr>
                     </thead>
@@ -66,10 +67,25 @@
                                 <p class="mb-0 small">{{ getPrice($order->amount) }}</p>
                             </td>
                             <td class="align-middle border-0">
-                                <p class="mb-0 small">On Hold</p>
+                                <p class="mb-0 small">{{$order->status}}</p>
                             </td>
                             <td class="align-middle border-0">
                                 <p class="mb-0 small">Credit Card</p>
+                            </td>
+                            <td class="align-middle border-0">
+                                <ul>
+                                    <li class="mb-0 small">{{ $order->country }}, {{ $order->state }}, {{ $order->city }}</li>
+                                    <li class="mb-0 small"><strong>Address line 1:</strong></strong> {{ $order->line1}}</li>
+                                    <li class="mb-0 small"><strong>Address line 2:</strong> {{ $order->line2}}</li>
+                                    <li class="mb-0 small"><strong>Zip code: </strong>{{ $order->postal_code}}</li>
+                                </ul>
+                            </td>
+                            <td class="align-middle border-0">
+                                <ul>
+                                    <li class="mb-0 small"><strong> Name: </strong> {{ $order->name}}</li>
+                                    <li class="mb-0 small"><strong>Email: </strong>{{ $order->email}}</li>
+                                    <li class="mb-0 small"><strong>Phone: </strong>{{ $order->phone}}</li>
+                                </ul>
                             </td>
                         </tr>
                         @endforeach

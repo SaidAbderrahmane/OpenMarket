@@ -71,7 +71,7 @@ $(function () {
   =============================================================== */
 $.getJSON('js/countries.json', function (data) {
     $.each(data, function (key, value) {
-        var selectOption = "<option value='" + value.name + "' data-dial-code='" + value.dial_code + "'>" + value.name + "</option>";
+        var selectOption = "<option value='" + value.code + "' data-dial-code='" + value.dial_code + "'>" + value.name + "</option>";
         $("select.country").append(selectOption);
     });
 })

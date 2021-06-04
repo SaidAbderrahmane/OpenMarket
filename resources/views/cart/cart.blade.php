@@ -61,7 +61,7 @@
                 </div>
               </td>
               <td class="align-middle border-0">
-                <p class="mb-0 small">{{ getPrice($product->total) }}</p>
+                <p class="mb-0 small">{{ getPrice($product->subtotal) }}</p>
               </td>
               <td class="align-middle border-0">
                 <form action="{{ route('cart.delete', $product->rowId) }}" method="POST">
@@ -140,6 +140,7 @@
 @include('layouts.jsFiles')
 
 <script>
+  //updating quantity using AJAX
   var qty = document.querySelectorAll('#qty');
   Array.from(qty).forEach((element) => {
     element.addEventListener('change', function() {
@@ -164,30 +165,5 @@
       });
     });
   });
-  // var select = document.querySelectorAll('#qty');
-
-  // select.addEventListener('change', function() {
-  //   var rowId = select.getAttribute('data-id');
-  //   var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-  //   fetch(
-  //     `/cart/${rowId}`, {
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "Accept": "application/json, text-plain, */*",
-  //         "X-Requested-With": "XMLHttpRequest",
-  //         "X-CSRF-TOKEN": token
-  //       },
-  //       method: 'PATCH',
-  //       body: JSON.stringify({
-  //         qty: select.value
-  //       })
-  //     }).then((data) => {
-  //     console.log(data);
-  //     location.reload();
-  //   }).catch((error) => {
-  //     console.log(`/cart/${rowId}`);
-  //     console.log(error);
-  //   })
-  // })
 </script>
 @endsection
