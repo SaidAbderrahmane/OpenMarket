@@ -13,6 +13,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb justify-content-lg-end mb-0 px-0">
                         <li class="breadcrumb-item"><a href="{{ route('shop') }}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('users.edit') }}">Profile</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Orders</li>
                     </ol>
                 </nav>

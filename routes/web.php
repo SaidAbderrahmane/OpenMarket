@@ -6,6 +6,7 @@ use App\Models\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use TCG\Voyager\Facades\Voyager;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,12 +59,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/thankyou', 'App\Http\Controllers\CheckoutController@thankyou');
 
     //orders
-    Route::get('/myorders', function () {
+    Route::get('/my-orders', function () {
         return view('orders');
     })->name('myorders');
+
+    //profile
+    Route::get('/my-profile', 'App\Http\Controllers\UsersController@edit')->name('users.edit');
+    Route::patch('/my-profile', 'App\Http\Controllers\UsersController@update')->name('users.update');
 });
 
 //voyager
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });
+
+//stores
+Route::get('/stores', 'App\Http\Controllers\StoresController@index')->name('stores.index');
+Route::get('/stores/{id}', 'App\Http\Controllers\StoresController@show')->name('stores.visit');

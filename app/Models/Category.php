@@ -11,24 +11,26 @@ class Category extends Model
 
     protected $table = 'categories';
     protected $primaryKey = 'id';
-    
+
     protected $fillable = [
         'name',
         'image',
-        'parentid'        
+        'parentid'
     ];
 
-    
-    public function products (){
-        return $this->belongsToMany(Product::class,'id','id');
-    }
-        
-    public function subcategories (){
-        return $this->hasMany(Category::class,'parentid');
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'id', 'id');
     }
 
-    public function parent (){
-        return $this->hasOne(Category::class,'id','parentid');
+    public function subcategories()
+    {
+        return $this->hasMany(Category::class, 'parent_id');
     }
 
+    public function parent()
+    {
+        return $this->hasOne(Category::class, 'id', 'parent_id');
+    }
 }

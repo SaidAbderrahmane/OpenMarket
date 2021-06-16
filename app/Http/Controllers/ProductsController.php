@@ -27,13 +27,21 @@ class ProductsController extends Controller
                 $sort = "DESC";
                 break;
         }
+        if (request()->store) {
+            $products = Product::with('store')->whereHas('store', function ($query) {
+                $query->where('id', request()->store);
+            })->orderBy($orderBy, $sort)->paginate(12);
+        } else {
+            $products = Product::with('store')->orderBy($orderBy, $sort)->paginate(12);
+        }
+        /*
         if (request()->category) {
             $products = Product::with('categories')->whereHas('categories', function ($query) {
                 $query->where('slug', request()->category)
                     ->orWhereIn('slug', function ($query) {
                         $query->from("categories")
                             ->select('slug')
-                            ->where("parentid", "=", function ($query) {
+                            ->where("parent_id", "=", function ($query) {
                                 $query->from("categories")
                                     ->select("id")
                                     ->where("slug", "=", request()->category);
@@ -42,6 +50,21 @@ class ProductsController extends Controller
             })->orderBy($orderBy, $sort)->paginate(12);
         } else {
             $products = Product::with('categories')->orderBy($orderBy, $sort)->paginate(12);
+        }
+        */
+        if (request()->category) {
+            $products =  $products->toQuery()->with('categories')->whereHas('categories', function ($query) {
+                $query->where('slug', request()->category)
+                    ->orWhereIn('slug', function ($query) {
+                        $query->from("categories")
+                            ->select('slug')
+                            ->where("parent_id", "=", function ($query) {
+                                $query->from("categories")
+                                    ->select("id")
+                                    ->where("slug", "=", request()->category);
+                            });
+                    });
+            })->orderBy($orderBy, $sort)->paginate(12);
         }
 
         //search

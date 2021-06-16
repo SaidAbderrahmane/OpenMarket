@@ -5,17 +5,34 @@
 <!-- HERO SECTION-->
 <section class="py-5 bg-light">
   <div class="container">
-    <div class="row px-4 px-lg-5 py-lg-4 align-items-center">
-      <div class="col-lg-6">
-        <h1 class="h2 text-uppercase mb-0">Shop</h1>
-      </div>
-      <div class="col-lg-6 text-lg-right">
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb justify-content-lg-end mb-0 px-0">
-            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Shop</li>
-          </ol>
-        </nav>
+    <div class="row px-4 px-lg-5 py-lg-4 justify-content-between">
+      @if (request()->store)
+      <div class="col-sm-4">
+        <h1 class="h2 text-uppercase mb-0">Store: <div class="h3 text-muted">{{ App\Models\Store::find(request()->store)->name }}</div>
+        </h1>
+        @else
+        <div class="col-sm-4">
+          <h1 class="h2 text-uppercase mb-0">Shop</h1>
+          @endif
+          @if (request()->category)
+          <h2 class="h3 text-uppercase mt-3">Category: <div class="h4 text-muted">{{ App\Models\Category::where('slug',request()->category)->first()->name}}</div>
+          </h2>
+          @endif
+        </div>
+        @if (request()->store)
+        <div class="col-sm-4">
+          <p><strong>Address : </strong> <br>{{ App\Models\Store::find(request()->store)->address}}</p>
+        </div>
+
+        @endif
+        <div class="col-sm-4 self-align-end text-lg-right ">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb justify-content-lg-end mb-0 px-0">
+              <li class="breadcrumb-item"><a href="/products">Home</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Shop</li>
+            </ol>
+          </nav>
+        </div>
       </div>
     </div>
   </div>
@@ -28,13 +45,13 @@
         <h5 class="text-uppercase mb-4">Categories</h5>
         @foreach ($categories as $category)
         @if ($category->parent === null)
-        <a class="reset-anchor" href="{{ route('shop',['category' => $category->slug]) }}">
+        <a class="reset-anchor" href="{{ route('shop', isset(request()->store) ? ['store' => request()->store,'category' => $category->slug ] : ['category' => $category->slug ]) }}">
           <div class="py-2 px-4 bg-dark text-white mb-3"><strong class="small text-uppercase font-weight-bold">{{ $category->name }}</strong></div>
         </a>
         @endif
         <ul class="list-unstyled small text-muted pl-lg-4 font-weight-normal">
           @foreach ($category->subcategories as $subcategory)
-          <li class="mb-2"><a class="reset-anchor" href="{{ route('shop',['category' => $subcategory->slug]) }}">{{ $subcategory->name }}</a></li>
+          <li class="mb-2"><a class="reset-anchor" href="{{ route('shop',isset(request()->store) ? ['store' => request()->store,'category' => $subcategory->slug ] : ['category' => $subcategory->slug ]) }}">{{ $subcategory->name }}</a></li>
           @endforeach
         </ul>
         @endforeach
@@ -114,15 +131,7 @@
         @endif
         <!-- PAGINATION-->
         {{ $products->appends(request()->input())->links()}}
-        <!-- <nav aria-label="Page navigation example">
-              <ul class="pagination justify-content-center justify-content-lg-end">
-                <li class="page-item"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
-                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
-              </ul>
-            </nav> -->
+
 
       </div>
     </div>
@@ -140,6 +149,7 @@
     urlParams.set('order', sortBy.value);
     window.location.search = urlParams;
   }
+  //categories 
 </script>
 <script>
   var range = document.getElementById('range');
@@ -149,7 +159,7 @@
       'max': 2000
     },
     step: 5,
-    start: [100, 1000],
+    start: [0, 2000],
     margin: 300,
     connect: true,
     direction: 'ltr',

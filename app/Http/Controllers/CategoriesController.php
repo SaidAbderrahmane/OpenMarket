@@ -51,7 +51,7 @@ class CategoriesController extends Controller
         $category = Category::create(
             [
                 'name' => $request->input('name'),
-                'parentid' => $request->input('parentid'),
+                'parent_id' => $request->input('parent_id'),
                 'image' => $newImageName
             ]
         );
@@ -103,7 +103,7 @@ class CategoriesController extends Controller
         $category->update(
             [
                 'name' => $request->input('name'),
-                'parentid' => $request->input('parentid'),
+                'parent_id' => $request->input('parent_id'),
                 'image' => $newImageName 
             ]
         );

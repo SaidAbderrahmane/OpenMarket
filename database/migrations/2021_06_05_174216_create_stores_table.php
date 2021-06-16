@@ -3,9 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use phpDocumentor\Reflection\Types\Null_;
 
-class CreateCategoriesTable extends Migration
+class CreateStoresTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,12 +13,11 @@ class CreateCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('stores', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('slug');
-            $table->unsignedBigInteger('parent_id')->nullable()->default(null);
-            $table->foreign('parent_id')->references('id')->on('categories')->onDelete('set Null');
+            $table->string('address');
+            $table->string('image');
             $table->timestamps();
         });
     }
@@ -31,6 +29,6 @@ class CreateCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('stores');
     }
 }

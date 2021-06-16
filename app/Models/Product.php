@@ -11,7 +11,7 @@ class Product extends Model
 
     protected $table = 'products';
     protected $primaryKey = 'id';
-    
+
     protected $fillable = [
         'title',
         'subtitle',
@@ -19,15 +19,20 @@ class Product extends Model
         'price',
         'stock'
     ];
-    
-    public function getPrice(){
-        $price = $this->price/100;
-        return '$'.number_format($price,2,'.',' ');
+
+    public function getPrice()
+    {
+        $price = $this->price / 100;
+        return '$' . number_format($price, 2, '.', ' ');
     }
-    
-   public function categories()
-   {
-       return $this->belongsToMany(Category::class);
-   }
-   
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class);
+    }
+
+    public function store()
+    {
+        return $this->belongsTo(Store::class);
+    }
 }

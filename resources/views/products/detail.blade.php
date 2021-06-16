@@ -72,8 +72,11 @@
             <a class="reset-anchor ml-2" href="{{ route('shop',['category'=> $category->slug]) }}"> {{ $category->name}} {{ $loop->last ? '' : ', '}}</a>
             @endforeach
           </li>
-          <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">Tags:</strong><a class="reset-anchor ml-2" href="#">Innovation</a></li>
-          <div class="badge badge-pill badge-info">{{ $stock }}</div>
+          <li class="px-3 py-2 mb-1 bg-white text-muted"><strong class="text-uppercase text-dark">Store:</strong><a class="reset-anchor ml-2" href="{{ route('shop',['store' => $product->store->id]) }}">{{ $product->store->name }}</a></li>
+          <li>
+            <div class="badge badge-pill badge-info">{{ $stock }}
+            </div>
+          </li>
         </ul>
       </div>
     </div>

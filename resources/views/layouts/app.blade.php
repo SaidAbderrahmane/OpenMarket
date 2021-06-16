@@ -38,7 +38,7 @@
   @yield('extra-script')
 </head>
 
-<body>
+<body style="background-image: url('http://127.0.0.1:8000/products?store=2&category=high-tech&order=low-high');">
 
   <div class="page-holder">
     @include('layouts.header')
@@ -79,4 +79,5 @@
 @include('layouts.footer')
 
 @yield('extra-js')
+
 </html>

@@ -44,7 +44,6 @@ class CheckoutController extends Controller
         ]);
         //Arr: an array helper of laravel 
         $clientSecret = Arr::get($intent, 'client_secret');
-
         return view('checkout.index', [
             'clientSecret' => $clientSecret
         ]);
@@ -110,9 +109,13 @@ class CheckoutController extends Controller
         if ($data['paymentIntent']['status'] === 'succeeded') {
             $this->updateStock();
             $order->paid = true;
-            $order->status = 'succeeded';
+            $order->status = 'Pick up';
             $order->save();
             Cart::destroy();
+
+            if (request()->session()->has('coupon')) {  //remove coupon if applied
+                session()->forget('coupon');
+            }
             Session::flash('success', 'Your order has been added successfully!');
             return response()->json(['success' => 'payment Intent Succeeded']);
         } else {
