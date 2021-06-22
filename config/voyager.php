@@ -148,8 +148,6 @@ return [
             'App\\Widgets\\Products',
             'App\\Widgets\\Orders',
             'App\\Widgets\\Stores',
-            
-
         ],
 
     ],

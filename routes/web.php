@@ -44,8 +44,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/cart', 'App\Http\Controllers\CartController@index')->name('cart');
     Route::patch('/cart/{rowId}', 'App\Http\Controllers\CartController@update')->name('cart.update');
     Route::delete('/cart/{rowId}', 'App\Http\Controllers\CartController@destroy')->name('cart.delete');
-    Route::post('/coupon', 'App\Http\Controllers\CouponsController@store')->name('cart.store.coupon');
-    Route::delete('/coupon', 'App\Http\Controllers\CouponsController@destroy')->name('cart.destroy.coupon');
+    Route::post('/coupon', 'App\Http\Controllers\CouponsController@store')->name('coupon.store');
+    Route::delete('/coupon', 'App\Http\Controllers\CouponsController@destroy')->name('coupon.destroy');
 
     //wishlist
     Route::post('/wishlist/add', 'App\Http\Controllers\WishlistController@store')->name('wishlist.store');
@@ -76,3 +76,8 @@ Route::group(['prefix' => 'admin'], function () {
 //stores
 Route::get('/stores', 'App\Http\Controllers\StoresController@index')->name('stores.index');
 Route::get('/stores/{id}', 'App\Http\Controllers\StoresController@show')->name('stores.visit');
+
+//test
+Route::get('/test', function () {
+    return view('test');
+});

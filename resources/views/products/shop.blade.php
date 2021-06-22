@@ -111,8 +111,8 @@
               <!-- <li class="list-inline-item text-muted mr-3"><a class="reset-anchor p-0" href="{{ route('shop',['order'=>'low-high']) }}">Price: Low to High</a></li> -->
               <!--  <li class="list-inline-item text-muted mr-3"><a class="reset-anchor p-0" href="#"><i class="fas fa-th"></i></a></li> -->
               <li class="list-inline-item">
-                <select class="selectpicker ml-auto" id="sorting" name="sorting" data-width="200" data-style="bs-select-form-control" data-title="Default sorting">
-                  <option value="date" selected>Date</option>
+                <select class="selectpicker ml-auto" id="sorting" name="sorting" data-width="200" data-style="bs-select-form-control">
+                  <option value="date">Date</option>
                   <option value="low-high">Price: Low to High</option>
                   <option value="high-low">Price: High to Low</option>
                 </select>
@@ -143,9 +143,9 @@
 <script>
   var sortBy = document.getElementById('sorting')
   sortBy.addEventListener('change', sortedBy, false);
-
+  const urlParams = new URLSearchParams(window.location.search);
+  sortBy.value =urlParams.get('order');
   function sortedBy() {
-    const urlParams = new URLSearchParams(window.location.search);
     urlParams.set('order', sortBy.value);
     window.location.search = urlParams;
   }
@@ -176,7 +176,7 @@
     }
   });
 
-  const urlParams = new URLSearchParams(window.location.search);
+  //const urlParams = new URLSearchParams(window.location.search);
   //initiaize filters values
   range.noUiSlider.set(JSON.parse(urlParams.get('price_range')));
   available = document.getElementById('available');

@@ -92,7 +92,7 @@
             <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small font-weight-bold">Subtotal</strong><span class="text-muted small">{{ getPrice(Cart::subtotal()) }}</span></li>
             @if(request()->session()->has('coupon'))
             <li class="d-flex align-items-center justify-content-between"><strong class="text-uppercase small font-weight-bold">Coupon [{{ request()->session()->get('coupon')['code'] }}]</strong>
-              <form action="{{ route('cart.destroy.coupon', $product->rowId) }}" method="POST">
+              <form action="{{ route('coupon.destroy') }}" method="POST">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="reset-anchor bg-transparent border-0"><i class="fas fa-times small text-muted"></i></button>
@@ -107,7 +107,7 @@
             @if(!request()->session()->has('coupon'))
             <!--COUPON-->
             <li>
-              <form action="{{ route('cart.store.coupon') }}" method="POST">
+              <form action="{{ route('coupon.store') }}" method="POST">
                 @csrf
                 <div class="form-group mb-0">
                   <input class="form-control" type="text" name="code" placeholder="Enter your coupon">

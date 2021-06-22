@@ -22,7 +22,7 @@ class Stores extends BaseDimmer
      */
     public function run()
     {
-        $count = \App\Models\Order::count();
+        $count = \App\Models\Store::count();
         $string = 'Stores';
 
         return view('voyager::dimmer', array_merge($this->config, [
