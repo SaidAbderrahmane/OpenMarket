@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Categories;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Review;
 use Gloudemans\Shoppingcart\Facades\Cart;
 
 class ProductsController extends Controller
@@ -100,10 +101,15 @@ class ProductsController extends Controller
         $product = Product::where('slug', '=', $slug)->firstOrFail();
         $stock = $product->stock === 0 ? 'Unavailable' : 'Available';
 
+        $reviews = Review::where('product_id', $product->id)->get();
+        $overall = $reviews->avg('rating');
+
         return view('products.detail', [
             'product' => $product,
             'products' => $products,
-            'stock' => $stock
+            'stock' => $stock,
+            'reviews' => $reviews,
+            'overall' => $overall,
         ]);
     }
 

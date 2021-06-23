@@ -36,6 +36,10 @@ Route::view('/dashboard', 'dashboard.index')->name('dashboard');
 Route::resource('/dashboard/categories', App\Http\Controllers\CategoriesController::class);
 Route::view('/dashboard/products', 'dashboard.products')->name('products');
 
+//review
+Route::post('/submit-review', 'App\Http\Controllers\ReviewsController@store')->name('review.store');
+Route::patch('/update-review/{id}', 'App\Http\Controllers\ReviewsController@update')->name('review.update');
+Route::delete('/destroy-review/{id}', 'App\Http\Controllers\ReviewsController@destroy')->name('review.destroy');
 
 Route::middleware(['auth'])->group(function () {
 
