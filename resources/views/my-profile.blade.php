@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @section('content')
-@include('layouts.modal')
 
 <!-- HERO SECTION-->
 <section class="py-5 bg-light">

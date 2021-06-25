@@ -248,8 +248,6 @@
                         }).then((data) => {
                         if (data.status === 400) { // if the product is not available anymore
                             redirect = '/products';
-                        } else {
-                            redirect = '/thankyou';
                         }
                         console.log(data);
                         form.reset();

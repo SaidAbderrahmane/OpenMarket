@@ -50,16 +50,18 @@
                             </td>
                             <td class="align-middle border-0">
                                 <table class="table">
-                                    <tr>
+                                    <tr class="border bg-light ">
                                         <th class="mb-0 small">Name</th>
                                         <th class="mb-0 small">Price</th>
                                         <th class="mb-0 small">Qty</th>
+                                        <th class="mb-0 small">Subtotal</th>
                                     </tr>
-                                    @foreach (unserialize($order->products) as $product)
+                                    @foreach (App\Models\OrderLine::where('order_id',$order->id)->get() as $orderLine)
                                     <tr>
-                                        <td class="mb-0 small">{{ $product[0] }}</td>
-                                        <td class="mb-0 small">{{ getPrice($product[1]) }}</td>
-                                        <td class="mb-0 small">{{ $product[2] }}</td>
+                                        <td class="mb-0 small">{{ $orderLine->product->title }}</td>
+                                        <td class="mb-0 small">{{ getPrice($orderLine->price) }}</td>
+                                        <td class="mb-0 small">{{ $orderLine->quantity }}</td>
+                                        <td class="mb-0 small">{{ getPrice($orderLine->price*$orderLine->quantity) }}</td>
                                     </tr>
                                     @endforeach
                                 </table>

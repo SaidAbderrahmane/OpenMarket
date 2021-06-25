@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductsController;
+use App\Models\OrderLine;
 use App\Models\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
@@ -82,6 +83,19 @@ Route::get('/stores', 'App\Http\Controllers\StoresController@index')->name('stor
 Route::get('/stores/{id}', 'App\Http\Controllers\StoresController@show')->name('stores.visit');
 
 //test
-Route::get('/test', function () {
+Route::any('/test', function () {
+
+    // $orderlines = [];
+    // Cart::instance('shopping');
+    // foreach (Cart::content() as $product) {
+    //     $orderLine = new OrderLine();
+    //     $orderLine->order_id = 8;
+    //     $orderLine->product_id = $product->model->id;
+    //     $orderLine->price = $product->model->price;
+    //     $orderLine->quantity = $product->qty;
+    //     $orderlines[] = $orderLine;
+    //     $orderLine->save();
+    // }
+    // return dd($orderlines);
     return view('test');
 });

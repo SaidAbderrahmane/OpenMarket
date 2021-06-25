@@ -12,6 +12,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Models\Order;
+use App\Models\OrderLine;
 use App\Models\Product;
 
 class CheckoutController extends Controller
@@ -89,12 +90,12 @@ class CheckoutController extends Controller
         $order->postal_code = $data['postal_code'];
         $order->city = $data['city'];
 
-
         $order->payment_intent_id = $data['paymentIntent']['id'];
         $order->amount = $data['paymentIntent']['amount'];
         $order->payment_created_at = (new DateTime())
             ->setTimestamp($data['paymentIntent']['created'])
             ->format('Y-m-d H:i:s');
+
         $products = [];
         $i = 0;
         foreach (Cart::content() as $product) {
@@ -104,6 +105,8 @@ class CheckoutController extends Controller
             $i++;
         }
         $order->products =  serialize($products);
+
+
         $order->user_id = Auth::user()->id;
 
         if ($data['paymentIntent']['status'] === 'succeeded') {
@@ -111,8 +114,18 @@ class CheckoutController extends Controller
             $order->paid = true;
             $order->status = 'Pick up';
             $order->save();
-            Cart::destroy();
 
+            // order line
+            foreach (Cart::content() as $product) {
+                $orderLine = new OrderLine();
+                $orderLine->order_id = $order->id;;
+                $orderLine->product_id = $product->model->id;
+                $orderLine->price = $product->model->price;
+                $orderLine->quantity = $product->qty;
+                $orderLine->save();
+            }
+
+            Cart::destroy();
             if (request()->session()->has('coupon')) {  //remove coupon if applied
                 session()->forget('coupon');
             }
@@ -125,7 +138,7 @@ class CheckoutController extends Controller
 
     public function thankyou()
     {
-        return Session::has('success') ? view('checkout.thankyou') : redirect()->route('shop');
+        return Session::has('success') ? view('checkout.thankyou') : redirect()->back()->withInput(); //redirect()->route('shop');
     }
     /**
      * Display the specified resource.
