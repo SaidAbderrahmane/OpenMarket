@@ -7,6 +7,7 @@ use App\Models\Product;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use TCG\Voyager\Facades\Voyager;
 
 /*
@@ -97,5 +98,23 @@ Route::any('/test', function () {
     //     $orderLine->save();
     // }
     // return dd($orderlines);
-    return view('test');
+    $top_10_products_by_amount = DB::table("order_lines")
+        ->join("products", "products.id", "=", "order_lines.product_id")
+        ->select("products.title", DB::raw('sum(order_lines.price)/100 as amount'))
+        ->limit(10)
+        ->orderBy("amount", "desc")
+        ->groupBy("products.title")
+        ->get();
+    return view('test')->with(['top_10_products_by_amount' => $top_10_products_by_amount->toArray()]);
 });
+
+/*select p.title, sum(o.price) 
+       from order_lines o, innerjoin products p on p.id= o.product_id
+       group by p.title
+       order by sum(o.price) desc 
+       limit 10*/
+       /*select p.title, sum(o.price) 
+       from order_lines o, products p where p.id = o.product_id
+       group by p.title
+       order by sum(o.price) desc 
+       limit 10*/
