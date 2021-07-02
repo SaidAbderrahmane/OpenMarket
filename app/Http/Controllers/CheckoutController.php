@@ -83,12 +83,14 @@ class CheckoutController extends Controller
         $order->email = $data['email'];
         $order->phone = $data['phone'];
         $order->country = $data['country'];
-        $order->city = $data['city'];
         $order->state = $data['state'];
         $order->line1 = $data['line1'];
         $order->line2 = $data['line2'];
-        $order->postal_code = $data['postal_code'];
         $order->city = $data['city'];
+        $order->postal_code = $data['postal_code'];
+
+        $order->payment_method = 'credit card';
+
 
         $order->payment_intent_id = $data['paymentIntent']['id'];
         $order->amount = $data['paymentIntent']['amount'];
@@ -96,15 +98,15 @@ class CheckoutController extends Controller
             ->setTimestamp($data['paymentIntent']['created'])
             ->format('Y-m-d H:i:s');
 
-        $products = [];
-        $i = 0;
-        foreach (Cart::content() as $product) {
-            $products['product_' . $i][] = $product->model->title;
-            $products['product_' . $i][] = $product->model->price;
-            $products['product_' . $i][] = $product->qty;
-            $i++;
-        }
-        $order->products =  serialize($products);
+        // $products = [];
+        // $i = 0;
+        // foreach (Cart::content() as $product) {
+        //     $products['product_' . $i][] = $product->model->title;
+        //     $products['product_' . $i][] = $product->model->price;
+        //     $products['product_' . $i][] = $product->qty;
+        //     $i++;
+        // }
+        // $order->products =  serialize($products);
 
 
         $order->user_id = Auth::user()->id;
@@ -118,7 +120,7 @@ class CheckoutController extends Controller
             // order line
             foreach (Cart::content() as $product) {
                 $orderLine = new OrderLine();
-                $orderLine->order_id = $order->id;;
+                $orderLine->order_id = $order->id;
                 $orderLine->product_id = $product->model->id;
                 $orderLine->price = $product->model->price;
                 $orderLine->quantity = $product->qty;
@@ -134,6 +136,73 @@ class CheckoutController extends Controller
         } else {
             return response()->json(['error' => 'Payment Intent Not succeeded']);
         }
+    }
+
+    public function cash()
+    {
+        Cart::instance('shopping');
+        if (Cart::count() <= 0) { //if the cart is empty
+            return redirect()->route('shop');
+        }
+
+        return view('checkout.cash');
+    }
+
+
+    public function cash_store(Request $request)
+    {
+        Cart::instance('shopping');
+        if ($this->isNotAvailable()) {    //check if the ordered qty is still available
+            $request->session()->flash('error', 'a product from your cart is not available anymore.');
+            return response()->json(['success' => false], 400);
+        }
+
+        if (request()->session()->has('coupon')) {  //if a coupon is applied
+            $total = request()->session()->get('coupon')['new_total'];
+        } else {
+            $total = Cart::total();
+        }
+
+        $order = new Order();
+
+        $order->name = $request->firstName . ' ' . $request->lastName;
+        $order->email = $request->email;
+        $order->phone = $request->phone;
+        $order->country = $request->name;
+        $order->state = $request->state;
+        $order->line1 = $request->line1;
+        $order->line2 = $request->line2;
+        $order->city = $request->city;
+        $order->postal_code = $request->postal_code;
+
+        $order->payment_method = 'Cash';
+
+        $order->payment_intent_id = random_int(1, 5959595);
+        $order->amount = $total;
+        $order->payment_created_at = null;
+
+        $order->user_id = Auth::user()->id;
+        $this->updateStock();
+        $order->paid = false;
+        $order->status = 'Pick up';
+        $order->save();
+
+        // order line
+        foreach (Cart::content() as $product) {
+            $orderLine = new OrderLine();
+            $orderLine->order_id = $order->id;
+            $orderLine->product_id = $product->model->id;
+            $orderLine->price = $product->model->price;
+            $orderLine->quantity = $product->qty;
+            $orderLine->save();
+        }
+
+        Cart::destroy();
+        if (request()->session()->has('coupon')) {  //remove coupon if applied
+            session()->forget('coupon');
+        }
+        Session::flash('success', 'Your order has been added successfully!');
+        return redirect('thankyou');
     }
 
     public function thankyou()

@@ -56,7 +56,12 @@
                 <div class="border d-flex align-items-center justify-content-between px-3">
                   <span class="small text-uppercase text-gray headings-font-family">Quantity</span>
                   <div class="quantity">
-                    <input id="qty" name="qty" class="form-control form-control-md border-0 shadow-0 p-0" type="number" min="1" max="8" data-id="{{ $product->rowId }} " value="{{ $product->qty }}" />
+                    <!-- <input id="qty" name="qty" class="form-control form-control-md border-0 shadow-0 p-0" type="number" min="1" max="8" data-id="{{ $product->rowId }} " value="{{ $product->qty }}" /> -->
+                    <select name="qty" id="qty" class="form-control form-control-md border-0 shadow-0" data-id="{{ $product->rowId }}">
+                      @for($i=1;$i<=$product->model->stock;$i++)
+                        <option value="{{ $i }}" {{  $i == $product->qty ? 'selected' : ''}}>{{$i}}</option>
+                        @endfor
+                    </select>
                   </div>
                 </div>
               </td>
@@ -79,7 +84,10 @@
       <div class="bg-light px-4 py-3">
         <div class="row align-items-center text-center">
           <div class="col-md-6 mb-3 mb-md-0 text-md-left"><a class="btn btn-link p-0 text-dark btn-sm" href=" {{ route('shop') }} "><i class="fas fa-long-arrow-alt-left mr-2"> </i>Continue shopping</a></div>
-          <div class="col-md-6 text-md-right"><a class="btn btn-outline-dark btn-sm" href="{{ route('checkout') }}">Procceed to checkout<i class="fas fa-long-arrow-alt-right ml-2"></i></a></div>
+          <div class="col-md-6 text-md-right">
+            <a class="btn btn-outline-dark btn-sm" href="{{ route('checkout') }}">Procceed to checkout<i class="fas fa-long-arrow-alt-right ml-2"></i></a><br><BR>
+            <a class="btn btn-outline-dark btn-sm" href="{{ route('checkout.cash') }}">Pay in CASH <i class="fas fa-long-arrow-alt-right ml-2"></i></a>
+          </div>
         </div>
       </div>
     </div>

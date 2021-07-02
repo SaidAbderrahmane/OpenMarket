@@ -37,16 +37,17 @@
                             <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Total</strong></th>
                             <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Status</strong></th>
                             <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Payment Method</strong></th>
+                            <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Paid</strong></th>
                             <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Shipping Address</strong></th>
                             <th class="border-0" style="width: 12%;" scope="col"> <strong class="text-small text-uppercase">Client Info</strong></th>
                             <th class="border-0" scope="col"> </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (Auth::user()->orders as $order)
+                        @foreach (Auth::user()->orders->sortByDesc('created_at') as $order)
                         <tr>
                             <td class="align-middle border-0">
-                                <p class="mb-0 small">{{ Carbon\Carbon::parse($order->payment_created_at)->format('d/m/y - H:i') }}</p>
+                                <p class="mb-0 small">{{ $order->created_at }}</p>
                             </td>
                             <td class="align-middle border-0">
                                 <table class="table">
@@ -73,7 +74,10 @@
                                 <p class="mb-0 small">{{$order->status}}</p>
                             </td>
                             <td class="align-middle border-0">
-                                <p class="mb-0 small">Credit Card</p>
+                                <p class="mb-0 small">{{$order->payment_method}}</p>
+                            </td>
+                            <td class="align-middle border-0">
+                                <p class="mb-0 small">{{$order->paid==1 ? 'paid' : 'not paid'}}</p>
                             </td>
                             <td class="align-middle border-0">
                                 <ul>

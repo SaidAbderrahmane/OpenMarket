@@ -62,6 +62,8 @@ Route::middleware(['auth'])->group(function () {
     //checkout
     Route::get('/checkout', 'App\Http\Controllers\CheckoutController@index')->name('checkout');
     Route::post('/checkout', 'App\Http\Controllers\CheckoutController@store')->name('checkout.store');
+    Route::get('/cash', 'App\Http\Controllers\CheckoutController@cash')->name('checkout.cash');
+    Route::post('/cash', 'App\Http\Controllers\CheckoutController@cash_store')->name('checkout.cash.store');
     Route::get('/thankyou', 'App\Http\Controllers\CheckoutController@thankyou');
 
     //orders
@@ -107,14 +109,3 @@ Route::any('/test', function () {
         ->get();
     return view('test')->with(['top_10_products_by_amount' => $top_10_products_by_amount->toArray()]);
 });
-
-/*select p.title, sum(o.price) 
-       from order_lines o, innerjoin products p on p.id= o.product_id
-       group by p.title
-       order by sum(o.price) desc 
-       limit 10*/
-       /*select p.title, sum(o.price) 
-       from order_lines o, products p where p.id = o.product_id
-       group by p.title
-       order by sum(o.price) desc 
-       limit 10*/
