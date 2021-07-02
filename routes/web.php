@@ -43,15 +43,17 @@ Route::post('/submit-review', 'App\Http\Controllers\ReviewsController@store')->n
 Route::patch('/update-review/{id}', 'App\Http\Controllers\ReviewsController@update')->name('review.update');
 Route::delete('/destroy-review/{id}', 'App\Http\Controllers\ReviewsController@destroy')->name('review.destroy');
 
+//cart
+Route::post('/cart/add', 'App\Http\Controllers\CartController@store')->name('cart.store');
+Route::get('/cart', 'App\Http\Controllers\CartController@index')->name('cart');
+Route::patch('/cart/{rowId}', 'App\Http\Controllers\CartController@update')->name('cart.update');
+Route::delete('/cart/{rowId}', 'App\Http\Controllers\CartController@destroy')->name('cart.delete');
+Route::post('/coupon', 'App\Http\Controllers\CouponsController@store')->name('coupon.store');
+Route::delete('/coupon', 'App\Http\Controllers\CouponsController@destroy')->name('coupon.destroy');
+
+
 Route::middleware(['auth'])->group(function () {
 
-    //cart
-    Route::post('/cart/add', 'App\Http\Controllers\CartController@store')->name('cart.store');
-    Route::get('/cart', 'App\Http\Controllers\CartController@index')->name('cart');
-    Route::patch('/cart/{rowId}', 'App\Http\Controllers\CartController@update')->name('cart.update');
-    Route::delete('/cart/{rowId}', 'App\Http\Controllers\CartController@destroy')->name('cart.delete');
-    Route::post('/coupon', 'App\Http\Controllers\CouponsController@store')->name('coupon.store');
-    Route::delete('/coupon', 'App\Http\Controllers\CouponsController@destroy')->name('coupon.destroy');
 
     //wishlist
     Route::post('/wishlist/add', 'App\Http\Controllers\WishlistController@store')->name('wishlist.store');
@@ -88,18 +90,6 @@ Route::get('/stores/{id}', 'App\Http\Controllers\StoresController@show')->name('
 //test
 Route::any('/test', function () {
 
-    // $orderlines = [];
-    // Cart::instance('shopping');
-    // foreach (Cart::content() as $product) {
-    //     $orderLine = new OrderLine();
-    //     $orderLine->order_id = 8;
-    //     $orderLine->product_id = $product->model->id;
-    //     $orderLine->price = $product->model->price;
-    //     $orderLine->quantity = $product->qty;
-    //     $orderlines[] = $orderLine;
-    //     $orderLine->save();
-    // }
-    // return dd($orderlines);
     $top_10_products_by_amount = DB::table("order_lines")
         ->join("products", "products.id", "=", "order_lines.product_id")
         ->select("products.title", DB::raw('sum(order_lines.price)/100 as amount'))

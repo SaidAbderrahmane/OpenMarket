@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Wishlist;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
@@ -17,8 +19,9 @@ class WishlistController extends Controller
      */
     public function index()
     {
-        Cart::instance('wishlist');
-        return view('wishlist.wishlist');
+        // Cart::instance('wishlist');
+        $wishlist = Wishlist::where('user_id', Auth::user()->id)->get();
+        return view('wishlist.wishlist')->with(['wishlist' => $wishlist]);
     }
 
     /**
@@ -39,18 +42,30 @@ class WishlistController extends Controller
      */
     public function store(Request $request)
     {
-        Cart::instance('wishlist');
+        // Cart::instance('wishlist');
+        // //duplication verification
+        // $duplicate = Cart::search(function ($cartItem, $rowId)
+        // use ($request) {
+        //     return $cartItem->id == $request->id;
+        // });
+        // if ($duplicate->isNotEmpty()) {
+        //     return redirect()->back()->with('success', 'The product has been already added to wishlist.');
+        // }
+        // $product = Product::find($request->id);
+        // Cart::add($product->id, $product->title, 1, $product->price)
+        //     ->associate('App\Models\Product');
+
         //duplication verification
-        $duplicate = Cart::search(function ($cartItem, $rowId)
-        use ($request) {
-            return $cartItem->id == $request->id;
-        });
-        if ($duplicate->isNotEmpty()) {
+        $duplicate = Wishlist::where('user_id', Auth::user()->id)->Where('product_id', $request->id)->first();
+
+        if (!empty($duplicate)) {
             return redirect()->back()->with('success', 'The product has been already added to wishlist.');
         }
-        $product = Product::find($request->id);
-        Cart::add($product->id, $product->title, 1, $product->price)
-            ->associate('App\Models\Product');
+        $wishlist = new Wishlist();
+        $wishlist->user_id = Auth::user()->id;
+        $wishlist->product_id = $request->id;
+        $wishlist->save();
+
         return redirect()->back()->with('success', 'The product has been added to wishlist successfully.');
     }
 
@@ -94,10 +109,13 @@ class WishlistController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($rowId)
+    public function destroy($id)
     {
-        Cart::instance('wishlist');
-        Cart::remove($rowId);
+        $wishlist = Wishlist::where('user_id', Auth::user()->id)->where('product_id', $id)->first();
+        $wishlist->delete();
+
+        // Cart::instance('wishlist');
+        // Cart::remove($rowId);
         return back()->with('success', 'The item has been removed.');
     }
 }

@@ -25,7 +25,7 @@
         </div>
     </div>
 </section>
-@if (Cart::count() > 0)
+@if ($wishlist->count() > 0)
 
 <section class="py-5">
     <h2 class="h5 text-uppercase mb-4">Wishlist</h2>
@@ -45,33 +45,33 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (Cart::content() as $product)
+                        @foreach ($wishlist as $item)
                         <tr>
                             <th class="pl-0 border-0" scope="row">
-                                <div class="media align-items-center"><a class="reset-anchor d-block animsition-link" href="/products/{{ $product->model->slug }}"><img src="{{ asset('storage/'.$product->model->image) }}" alt="..." width="70" /></a>
-                                    <div class="media-body ml-3"><strong class="h6"><a class="reset-anchor animsition-link" href="/products/{{ $product->model->slug }}">{{ $product->model->title }}</a></strong></div>
+                                <div class="media align-items-center"><a class="reset-anchor d-block animsition-link" href="/products/{{ $item->product->slug }}"><img src="{{ asset('storage/'.$item->product->image) }}" alt="..." width="70" /></a>
+                                    <div class="media-body ml-3"><strong class="h6"><a class="reset-anchor animsition-link" href="/products/{{ $item->product->slug }}">{{ $item->product->title }}</a></strong></div>
                                 </div>
                             </th>
                             <td class="align-middle border-0">
-                                <p class="mb-0 small">{{ $product->model->subtitle }}</p>
+                                <p class="mb-0 small">{{ $item->subtitle }}</p>
                             </td>
                             <td class="align-middle border-0">
-                                @foreach ($product->model->categories as $category)
+                                @foreach ($item->product->categories as $category)
                                 <a class="reset-anchor mb-0 small" href="{{ route('shop',['category' => $category->slug]) }}">{{ $category->name }}</a>
                                 @endforeach
                             </td>
                             <td class="align-middle border-0">
-                                <p class="mb-0 small">{{ $product->model->getPrice() }}</p>
+                                <p class="mb-0 small">{{ $item->product->getPrice() }}</p>
                             </td>
                             <td class="align-middle border-0">
-                                <form action="{{ route('cart.store',['id'=>$product->model->id,'qty'=>1])}}" method="POST">
+                                <form action="{{ route('cart.store',['id'=>$item->product->id,'qty'=>1])}}" method="POST">
                                     @csrf
                                     @method('POST')
                                     <button type="submit" class="btn btn-outline-dark"><i class="fas fa-shopping-cart "></i> Add to cart</button>
                                 </form>
                             </td>
                             <td class="align-middle border-0">
-                                <form action="{{ route('wishlist.delete', $product->rowId) }}" method="POST">
+                                <form action="{{ route('wishlist.delete', $item->product->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="reset-anchor bg-transparent border-0"><i class="fas fa-trash-alt small text-muted"></i> Remove</button>

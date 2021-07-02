@@ -6,13 +6,13 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <!-- Link--><a class="nav-link active" href=" {{ route('index') }} ">Home</a>
+                            <!-- Link--><a id="nav_home" class="nav-link" href=" {{ route('index') }} ">Home</a>
                         </li>
                         <li class="nav-item">
-                            <!-- Link--><a class="nav-link" href=" {{ route('shop') }} ">Shop</a>
+                            <!-- Link--><a id="nav_shop" class="nav-link" href=" {{ route('shop') }} ">Shop</a>
                         </li>
                         <li class="nav-item">
-                            <!-- Link--><a class="nav-link" href=" {{ route('stores.index') }} ">Stores</a>
+                            <!-- Link--><a id="nav_stores" class="nav-link" href=" {{ route('stores.index') }} ">Stores</a>
                         </li>
                         <!-- <li class="nav-item">
                             <a class="nav-link" href="{{ route('myorders')}}">My orders</a>
@@ -20,12 +20,32 @@
                         <!-- <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" id="pagesDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pages</a>
                             <div class="dropdown-menu mt-3" aria-labelledby="pagesDropdown"><a class="dropdown-item border-0 transition-link" href="{{ route('index') }}">Homepage</a><a class="dropdown-item border-0 transition-link" href="shop.html">Category</a>
                         </li> -->
+                        <script>
+                            var nav_home = document.getElementById("nav_home");
+                            var nav_shop = document.getElementById("nav_shop");
+                            var nav_stores = document.getElementById("nav_stores");
+                            if (document.URL.indexOf('index') != -1) {
+                                nav_home.classList.add('active');
+                                nav_shop.classList.remove('active');
+                                nav_stores.classList.remove('active');
+                            } else if (document.URL.indexOf('products') != -1) {
+                                nav_shop.classList.add('active');
+                                nav_home.classList.remove('active');
+                                nav_stores.classList.remove('active');
+                            } else if (document.URL.indexOf('stores') != -1) {
+                                nav_stores.classList.add('active');
+                                nav_shop.classList.remove('active');
+                                nav_home.classList.remove('active');
+                            }
+                        </script>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item"><a class="nav-link" href=" {{ route('cart') }} "> <i class="fas fa-dolly-flatbed mr-1 text-gray"></i>Cart<small class="text-gray"> ({{ Cart::instance('shopping')->count() }})</small></a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('wishlist') }}"> <i class="far fa-heart mr-1"></i><small class="text-gray"> ({{ Cart::instance('wishlist')->count() }})</small></a></li>
+                        @if(Auth::user())
+                        <li class="nav-item"><a class="nav-link" href="{{ route('wishlist') }}"> <i class="far fa-heart mr-1"></i><small class="text-gray"> ({{ App\Models\Wishlist::where('user_id',Auth::user()->id)->count() }})</small></a></li>
+                        @endif
                         <!-- Authentication Links -->
                         @guest
                         @if (Route::has('login'))
