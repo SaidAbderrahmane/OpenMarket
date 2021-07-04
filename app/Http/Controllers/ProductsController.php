@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Product;
 use App\Models\Review;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\DB;
 
 class ProductsController extends Controller
 {
@@ -35,24 +36,7 @@ class ProductsController extends Controller
         } else {
             $products = Product::with('store')->orderBy($orderBy, $sort)->paginate(12);
         }
-        /*
-        if (request()->category) {
-            $products = Product::with('categories')->whereHas('categories', function ($query) {
-                $query->where('slug', request()->category)
-                    ->orWhereIn('slug', function ($query) {
-                        $query->from("categories")
-                            ->select('slug')
-                            ->where("parent_id", "=", function ($query) {
-                                $query->from("categories")
-                                    ->select("id")
-                                    ->where("slug", "=", request()->category);
-                            });
-                    });
-            })->orderBy($orderBy, $sort)->paginate(12);
-        } else {
-            $products = Product::with('categories')->orderBy($orderBy, $sort)->paginate(12);
-        }
-        */
+
         if (request()->category) {
             $products =  $products->toQuery()->with('categories')->whereHas('categories', function ($query) {
                 $query->where('slug', request()->category)
@@ -74,7 +58,7 @@ class ProductsController extends Controller
 
             $products =  $products->toQuery()->where('title', 'like', "%$q%")
                 ->orWhere('description', 'like', "%$q%")
-                ->orderBy('created_at', 'DESC')
+                ->orderBy($orderBy, $sort)
                 ->paginate(12);
         }
         //price range filter
@@ -113,23 +97,64 @@ class ProductsController extends Controller
         ]);
     }
 
-    // public function search()
-    // {
-    //     request()->validate([
-    //         'q' => 'required|min:1'
-    //     ]);
+    public function store(Request $request)
+    {
+        if (!empty($request->image)) {
+            $newImageName = time() . '-' . $request->title . '.' . $request->image->extension();
+            $request->image->move(public_path('storage'), $newImageName);
+        }
+        $product = Product::create(
+            [
+                'title' => $request->title,
+                'slug' => $request->slug,
+                'subtitle' => $request->subtitle,
+                'description' => $request->description,
+                'price' => $request->price,
+                'stock' => $request->stock,
+                'store_id' => $request->store,
+                'image' => $newImageName
+            ]
+        );
 
-    //     $q = request()->input('q');
+        $product->categories()->attach($request->categories);
 
-    //     $products = Product::where('title', 'like', "%$q%")
-    //         ->orWhere('description', 'like', "%$q%")
-    //         ->orderBy('created_at', 'DESC')
-    //         ->paginate(12);
+        return redirect()->route('store_owner.products')->with('success', 'product added successfully');
+    }
 
-    //     $categories = Category::all();
-    //     return view('products.shop', [
-    //         'products' => $products,
-    //         'categories' => $categories
-    //     ]);
-    // }
+    public function update(Request $request, $id)
+    {
+        $product = Product::where('id', $id)->first();
+        $newImageName = $product->image;
+        if (!empty($request->image)) {
+            $newImageName = time() . '-' . $request->title . '.' . $request->image->extension();
+            $request->image->move(public_path('storage'), $newImageName);
+            $product->update(
+                [
+                    'image' => $newImageName
+                ]
+            );
+        }
+        $product->update(
+            [
+                'title' => $request->title,
+                'slug' => $request->slug,
+                'subtitle' => $request->subtitle,
+                'description' => $request->description,
+                'price' => $request->price,
+                'stock' => $request->stock,
+                'store_id' => $request->store
+            ]
+        );
+
+        $product->categories()->sync($request->categories);
+
+        return redirect()->route('store_owner.products')->with('success', 'product updated successfully');
+    }
+
+    public function destroy($id)
+    {
+        $product = Product::where('id', $id)->first();
+        $product->delete();
+        return redirect()->route('store_owner.products')->with('success', 'product removed successfully');
+    }
 }

@@ -76,6 +76,33 @@ Route::middleware(['auth'])->group(function () {
     //profile
     Route::get('/my-profile', 'App\Http\Controllers\UsersController@edit')->name('users.edit');
     Route::patch('/my-profile', 'App\Http\Controllers\UsersController@update')->name('users.update');
+
+
+    //store_owner routes 
+    Route::group(['middleware' => 'role:Store owner'], function () {
+        Route::get('/store-owner', 'App\Http\Controllers\StoreOwnerController@index')->name('store_owner.index');
+
+        Route::get('/store-owner/products', 'App\Http\Controllers\StoreOwnerController@products')->name('store_owner.products');
+
+        Route::get('/store-owner/products/add', 'App\Http\Controllers\StoreOwnerController@add_product')->name('store_owner.products.add');
+        Route::get('/store-owner/products/{id}', 'App\Http\Controllers\StoreOwnerController@view_product')->name('store_owner.products.view');
+        Route::get('/store-owner/products/{id}/edit', 'App\Http\Controllers\StoreOwnerController@edit_product')->name('store_owner.products.edit');
+        Route::post('/store-owner/prodcuts/store', 'App\Http\Controllers\ProductsController@store')->name('product.store');
+        Route::patch('/store-owner/products/{id}/edit', 'App\Http\Controllers\ProductsController@update')->name('product.update');
+        Route::delete('/store-owner/products/{id}/remove', 'App\Http\Controllers\ProductsController@destroy')->name('product.destroy');
+
+
+        Route::get('/store-owner/stores', 'App\Http\Controllers\StoreOwnerController@stores')->name('store_owner.stores');
+
+        Route::get('/store-owner/stores/add',  'App\Http\Controllers\StoreOwnerController@add_store')->name('store_owner.stores.add');
+        Route::get('/store-owner/stores/{id}', 'App\Http\Controllers\StoreOwnerController@view_store')->name('store_owner.stores.view');
+        Route::get('/store-owner/stores/{id}/edit', 'App\Http\Controllers\StoreOwnerController@edit_store')->name('store_owner.stores.edit');
+        Route::post('/store-owner/stores/store', 'App\Http\Controllers\StoresController@store')->name('store.store');
+        Route::patch('/store-owner/stores/{id}/edit', 'App\Http\Controllers\StoresController@update')->name('store.update');
+        Route::delete('/store-owner/stores/{id}/remove', 'App\Http\Controllers\StoresController@destroy')->name('store.destroy');
+
+        Route::get('/store-owner/orders', 'App\Http\Controllers\StoreOwnerController@orders')->name('store_owner.orders');
+    });
 });
 
 //voyager

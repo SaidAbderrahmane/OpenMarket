@@ -16,7 +16,7 @@ class CategoriesController extends Controller
     {
         $data = Category::all();
         $test = Category::find(37);
-         //dd($test->parent->name);
+        //dd($test->parent->name);
 
         return view('dashboard.categories', [
             'data' => $data
@@ -96,15 +96,15 @@ class CategoriesController extends Controller
         ]);
         $category = Category::where('id', $id);
         $newImageName = $category->first()->image;
-        if(!empty($request->image)){
+        if (!empty($request->image)) {
             $newImageName = time() . '-' . $request->name . '.' . $request->image->extension();
             $request->image->move(public_path('images'), $newImageName);
-        } 
+        }
         $category->update(
             [
                 'name' => $request->input('name'),
                 'parent_id' => $request->input('parent_id'),
-                'image' => $newImageName 
+                'image' => $newImageName
             ]
         );
         return redirect('dashboard/categories');
@@ -117,10 +117,10 @@ class CategoriesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {   
-        $category = Category::where('id',$id)->first();
+    {
+        $category = Category::where('id', $id)->first();
         $category->delete();
-   
+
         return redirect('/dashboard/categories');
     }
 }

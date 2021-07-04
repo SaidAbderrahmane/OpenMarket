@@ -72,23 +72,6 @@
           <input class="custom-control-input" id="available" type="checkbox">
           <label class="custom-control-label text-small" for="available">Available items</label>
         </div>
-        <!-- <h6 class="text-uppercase mb-3">Buying format</h6>
-        <div class="custom-control custom-radio">
-          <input class="custom-control-input" id="customRadio1" type="radio" name="customRadio">
-          <label class="custom-control-label text-small" for="customRadio1">All Listings</label>
-        </div>
-        <div class="custom-control custom-radio">
-          <input class="custom-control-input" id="customRadio2" type="radio" name="customRadio">
-          <label class="custom-control-label text-small" for="customRadio2">Best Offer</label>
-        </div>
-        <div class="custom-control custom-radio">
-          <input class="custom-control-input" id="customRadio3" type="radio" name="customRadio">
-          <label class="custom-control-label text-small" for="customRadio3">Auction</label>
-        </div>
-        <div class="custom-control custom-radio">
-          <input class="custom-control-input" id="customRadio4" type="radio" name="customRadio">
-          <label class="custom-control-label text-small" for="customRadio4">Buy It Now</label>
-        </div> -->
       </div>
       <!-- SHOP LISTING-->
       <div class="col-lg-9 order-1 order-lg-2 mb-5 mb-lg-0">
@@ -144,12 +127,12 @@
   var sortBy = document.getElementById('sorting')
   sortBy.addEventListener('change', sortedBy, false);
   const urlParams = new URLSearchParams(window.location.search);
-  sortBy.value =urlParams.get('order');
+  sortBy.value = urlParams.get('order');
+
   function sortedBy() {
     urlParams.set('order', sortBy.value);
     window.location.search = urlParams;
   }
-  //categories 
 </script>
 <script>
   var range = document.getElementById('range');

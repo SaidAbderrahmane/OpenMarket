@@ -14,10 +14,13 @@ class Product extends Model
 
     protected $fillable = [
         'title',
+        'slug',
         'subtitle',
+        'description',
         'image',
-        'price',
-        'stock'
+        'stock',
+        'store_id',
+        'price'
     ];
 
     public function getPrice()

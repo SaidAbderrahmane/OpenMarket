@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Store;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StoresController extends Controller
 {
@@ -50,7 +51,25 @@ class StoresController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'image' => 'required'
+        ]);
+
+        if (!empty($request->image)) {
+            $newImageName = time() . '-' . $request->name . '.' . $request->image->extension();
+            $request->image->move(public_path('storage'), $newImageName);
+        }
+        $store = Store::create(
+            [
+                'name' => $request->name,
+                'address' => $request->address,
+                'user_id' => Auth::user()->id,
+                'image' => $newImageName
+            ]
+        );
+
+        return redirect()->route('store_owner.stores')->with('success', 'store created successfully');
     }
 
     /**
@@ -74,27 +93,34 @@ class StoresController extends Controller
     {
         //
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
+        $store = Store::where('id', $id)->first();
+        $newImageName = $store->image;
+        if (!empty($request->image)) {
+            $newImageName = time() . '-' . $request->name . '.' . $request->image->extension();
+            $request->image->move(public_path('storage'), $newImageName);
+            $store->update(
+                [
+                    'image' => $newImageName
+                ]
+            );
+        }
+        $store->update(
+            [
+                'name' => $request->name,
+                'address' => $request->address,
+                'user_id' => Auth::user()->id,
+            ]
+        );
+
+        return redirect()->route('store_owner.stores')->with('success', 'store updated successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+        $store = Store::where('id', $id)->first();
+        $store->delete();
+        return redirect()->route('store_owner.stores')->with('success', 'store removed successfully');
     }
 }
