@@ -29,9 +29,11 @@
                 <a class="reset-anchor" href="#">
                     <div class="py-2 px-4 bg-light mb-3"><strong class="small text-uppercase font-weight-bold">My profile </strong></div>
                 </a>
+                @if (Auth::user()->hasRole('user'))
                 <a class="reset-anchor" href="{{ route('myorders') }}">
                     <div class="py-2 px-4 bg-light mb-3"><strong class="small text-uppercase font-weight-bold">My orders</strong></div>
                 </a>
+                @endif
 
                 <!-- <ul class="list-unstyled small text-muted pl-lg-4 font-weight-normal">
                     <li class="mb-2"><a class="reset-anchor" href="#">my orders</a></li>

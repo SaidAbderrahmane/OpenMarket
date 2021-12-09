@@ -100,7 +100,7 @@
                                 <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Title</strong></th>
                                 <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Slug</strong></th>
                                 <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Subtitle</strong></th>
-                                <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Description</strong></th>
+                                <!-- <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Description</strong></th> -->
                                 <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Price</strong></th>
                                 <th class="border-0" scope="col"> <strong class="text-small text-uppercase">categories</strong></th>
                                 <th class="border-0" scope="col"> <strong class="text-small text-uppercase">Image</strong></th>
@@ -123,9 +123,9 @@
                                 <td class="align-middle border-0">
                                     <p class="mb-0 small">{{$product->subtitle}}</p>
                                 </td>
-                                <td class="align-middle border-0">
-                                    <p class="mb-0 small">{{$product->description}}</p>
-                                </td>
+                                <!-- <td class="align-middle border-0">
+                                    <p class="mb-0 small">{!! $product->description !!}</p>
+                                </td> -->
                                 <td class="align-middle border-0">
                                     <p class="mb-0 small">{{$product->getPrice()}}</p>
                                 </td>
@@ -134,8 +134,8 @@
                                     <p class="mb-0 small">{{ $category->name }}</p>
                                     @endforeach
                                 </td>
-                                <td class="align-middle border-0">
-                                    <img class="img-fluid" src="{{ asset('storage/'.$product->image) }}" alt="no image">
+                                <td class="align-middle border-0 text-center">
+                                    <img class="img-thumbnail" src="{{ asset('storage/'.$product->image) }}" alt="no image">
                                 </td>
                                 <td class="align-middle border-0">
                                     <ul style="list-style: none;">

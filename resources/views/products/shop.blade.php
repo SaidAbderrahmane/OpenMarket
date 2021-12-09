@@ -46,7 +46,7 @@
         @foreach ($categories as $category)
         @if ($category->parent === null)
         <a class="reset-anchor" href="{{ route('shop', isset(request()->store) ? ['store' => request()->store,'category' => $category->slug ] : ['category' => $category->slug ]) }}">
-          <div class="py-2 px-4 bg-dark text-white mb-3"><strong class="small text-uppercase font-weight-bold">{{ $category->name }}</strong></div>
+          <div class="py-2 px-4 bg-light   mb-3"><strong class="small text-uppercase font-weight-bold">{{ $category->name }}</strong></div>
         </a>
         @endif
         <ul class="list-unstyled small text-muted pl-lg-4 font-weight-normal">
@@ -85,7 +85,7 @@
           </div>
           <div class="col-sm-5">
             <form class="form-inline my-2 my-lg-0" action="{{ route('shop') }}">
-              <input class="form-control mr-sm-2" type="search" name="q" value="{{ request()->q ?? ''}}" placeholder="Search" aria-label="Search" required>
+              <input class="form-control mr-sm-2" type="search" name="q" value="{{ request()->q ?? ''}}" placeholder="Search" aria-label="Search" autocomplete= "off" required>
               <button class="btn btn-dark reset-anchor" type="submit"><i class="fas fa-search"></i></button>
             </form>
           </div>

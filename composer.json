@@ -17,7 +17,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.2",
         "stripe/stripe-php": "^7.79",
-        "tcg/voyager": "^1.4"
+        "tcg/voyager": "^1.5"
     },
     "require-dev": {
         "andyabih/laravel-to-uml": "^1.0",

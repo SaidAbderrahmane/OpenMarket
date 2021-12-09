@@ -85,7 +85,7 @@
         <div class="row align-items-center text-center">
           <div class="col-md-6 mb-3 mb-md-0 text-md-left"><a class="btn btn-link p-0 text-dark btn-sm" href=" {{ route('shop') }} "><i class="fas fa-long-arrow-alt-left mr-2"> </i>Continue shopping</a></div>
           <div class="col-md-6 text-md-right">
-            <a class="btn btn-outline-dark btn-sm" href="{{ route('checkout') }}">Procceed to checkout<i class="fas fa-long-arrow-alt-right ml-2"></i></a><br><BR>
+            <a class="btn btn-outline-dark btn-sm" href="{{ route('checkout') }}">Pay with credit card<i class="fas fa-long-arrow-alt-right ml-2"></i></a><br><BR>
             <a class="btn btn-outline-dark btn-sm" href="{{ route('checkout.cash') }}">Pay in CASH <i class="fas fa-long-arrow-alt-right ml-2"></i></a>
           </div>
         </div>
@@ -118,7 +118,7 @@
               <form action="{{ route('coupon.store') }}" method="POST">
                 @csrf
                 <div class="form-group mb-0">
-                  <input class="form-control" type="text" name="code" placeholder="Enter your coupon">
+                  <input class="form-control" type="text" name="code" placeholder="Enter your coupon" autocomplete="off">
                   <button class="btn btn-dark btn-sm btn-block" type="submit"> <i class="fas fa-gift mr-2"></i>Apply coupon</button>
                 </div>
               </form>

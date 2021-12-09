@@ -20,23 +20,25 @@ use TCG\Voyager\Facades\Voyager;
 | contains the "web" middleware group. Now create something great!
 |
 */
+// //dashboard
+// Route::view('/dashboard', 'dashboard.index')->name('dashboard');
+// Route::resource('/dashboard/categories', App\Http\Controllers\CategoriesController::class);
+// Route::view('/dashboard/products', 'dashboard.products')->name('products');
 
+//Route::get('/search', 'App\Http\Controllers\ProductsController@search')->name('products.search');
 
 Auth::routes();
 
 //products
-Route::get('/products', 'App\Http\Controllers\ProductsController@index')->name('shop');
-Route::get('/products/{slug}', 'App\Http\Controllers\ProductsController@details')->where('slug', '^[a-z][-\.a-z0-9]*')->name('detail');
-//Route::get('/search', 'App\Http\Controllers\ProductsController@search')->name('products.search');
+Route::get('/products','App\Http\Controllers\ProductsController@index')->name('shop');
+Route::get('/products/{slug}', 'App\Http\Controllers\ProductsController@details')->name('detail');
+
 //auth
 Route::get('/   ', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::view('/index', 'layouts.index')->name('index');
+Route::get('/index', [App\Http\Controllers\HomeController::class, 'index'])->name('index');
 
-//dashboard
-Route::view('/dashboard', 'dashboard.index')->name('dashboard');
-Route::resource('/dashboard/categories', App\Http\Controllers\CategoriesController::class);
-Route::view('/dashboard/products', 'dashboard.products')->name('products');
+
 
 //review
 Route::post('/submit-review', 'App\Http\Controllers\ReviewsController@store')->name('review.store');
@@ -51,15 +53,16 @@ Route::delete('/cart/{rowId}', 'App\Http\Controllers\CartController@destroy')->n
 Route::post('/coupon', 'App\Http\Controllers\CouponsController@store')->name('coupon.store');
 Route::delete('/coupon', 'App\Http\Controllers\CouponsController@destroy')->name('coupon.destroy');
 
+//stores
+Route::get('/stores', 'App\Http\Controllers\StoresController@index')->name('stores.index');
+Route::get('/stores/{id}', 'App\Http\Controllers\StoresController@show')->name('stores.visit');
 
 Route::middleware(['auth'])->group(function () {
-
 
     //wishlist
     Route::post('/wishlist/add', 'App\Http\Controllers\WishlistController@store')->name('wishlist.store');
     Route::get('/wishlist', 'App\Http\Controllers\WishlistController@index')->name('wishlist');
     Route::delete('/wishlist/{rowId}', 'App\Http\Controllers\WishlistController@destroy')->name('wishlist.delete');
-
 
     //checkout
     Route::get('/checkout', 'App\Http\Controllers\CheckoutController@index')->name('checkout');
@@ -76,7 +79,6 @@ Route::middleware(['auth'])->group(function () {
     //profile
     Route::get('/my-profile', 'App\Http\Controllers\UsersController@edit')->name('users.edit');
     Route::patch('/my-profile', 'App\Http\Controllers\UsersController@update')->name('users.update');
-
 
     //store_owner routes 
     Route::group(['middleware' => 'role:Store owner'], function () {
@@ -109,10 +111,6 @@ Route::middleware(['auth'])->group(function () {
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });
-
-//stores
-Route::get('/stores', 'App\Http\Controllers\StoresController@index')->name('stores.index');
-Route::get('/stores/{id}', 'App\Http\Controllers\StoresController@show')->name('stores.visit');
 
 //test
 Route::any('/test', function () {

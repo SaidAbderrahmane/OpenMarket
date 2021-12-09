@@ -9,7 +9,8 @@
                     @endforeach
                 </p>
             </div>
-            <div class="badge text-white badge-"></div><a class="d-block" href="/products/{{ $product->slug }}"><img class="img-fluid w-100" src="{{ asset('storage/'.$product->image) }}" alt="..."></a>
+            <div style="height: 300px;"><a class="d-block" href="/products/{{ $product->slug }}"><img class="img-fluid" style="max-height:300px!important; width:auto!important;" src="{{ asset('storage/'.$product->image) }}" alt="..."></a>
+            </div>
             <div class="product-overlay">
                 <ul class="mb-0 list-inline">
                     <li class="list-inline-item m-0 p-0">

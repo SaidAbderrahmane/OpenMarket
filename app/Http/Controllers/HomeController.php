@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -23,6 +24,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('layouts.index');
+        if (Auth::user()) {
+            if (Auth::user()->hasRole('Store owner'))
+                return view('store_owner.index');
+            else if (Auth::user()->hasRole('admin'))
+                return redirect('/admin');
+            else if (Auth::user()->hasRole('user'))
+                return redirect('/products');
+        }
+        return redirect('/products');
     }
 }

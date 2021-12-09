@@ -5,6 +5,9 @@
                 <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
+
+                        @guest
+
                         <li class="nav-item">
                             <!-- Link--><a id="nav_home" class="nav-link" href=" {{ route('index') }} ">Home</a>
                         </li>
@@ -14,6 +17,35 @@
                         <li class="nav-item">
                             <!-- Link--><a id="nav_stores" class="nav-link" href=" {{ route('stores.index') }} ">Stores</a>
                         </li>
+                        @else
+                        @if (Auth::user()->hasRole('user'))
+                        <li class="nav-item">
+                            <!-- Link--><a id="nav_home" class="nav-link" href=" {{ route('index') }} ">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <!-- Link--><a id="nav_shop" class="nav-link" href=" {{ route('shop') }} ">Shop</a>
+                        </li>
+                        <li class="nav-item">
+                            <!-- Link--><a id="nav_stores" class="nav-link" href=" {{ route('stores.index') }} ">Stores</a>
+                        </li>
+                        @endif
+                        @endguest
+
+                        @if(Auth::user())
+                        @if(Auth::user()->hasRole('Store owner'))
+                        <li class="nav-item">
+                            <!-- Link--><a id="nav_stores" class="nav-link" href=" {{ route('store_owner.index') }} ">Store Owner Dashboard</a>
+                        </li>
+                        @endif
+                        @endif
+                        @if(Auth::user())
+                        @if(Auth::user()->hasRole('admin'))
+                        <li class="nav-item">
+                            <!-- Link--><a id="nav_stores" class="nav-link" href="/admin">Admin Panel</a>
+                        </li>
+                        @endif
+                        @endif
+
                         <!-- <li class="nav-item">
                             <a class="nav-link" href="{{ route('myorders')}}">My orders</a>
                         </li> -->
@@ -42,10 +74,14 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
+                        @guest
                         <li class="nav-item"><a class="nav-link" href=" {{ route('cart') }} "> <i class="fas fa-dolly-flatbed mr-1 text-gray"></i>Cart<small class="text-gray"> ({{ Cart::instance('shopping')->count() }})</small></a></li>
-                        @if(Auth::user())
+                        @else
+                        @if (Auth::user()->hasRole('user'))
+                        <li class="nav-item"><a class="nav-link" href=" {{ route('cart') }} "> <i class="fas fa-dolly-flatbed mr-1 text-gray"></i>Cart<small class="text-gray"> ({{ Cart::instance('shopping')->count() }})</small></a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('wishlist') }}"> <i class="far fa-heart mr-1"></i><small class="text-gray"> ({{ App\Models\Wishlist::where('user_id',Auth::user()->id)->count() }})</small></a></li>
                         @endif
+                        @endguest
                         <!-- Authentication Links -->
                         @guest
                         @if (Route::has('login'))

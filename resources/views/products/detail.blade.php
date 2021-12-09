@@ -210,10 +210,12 @@
             </div>
           </div>
           <div class="row">
+            @if (Auth::user())
             <button type="button" class="btn btn-dark btn-md" data-toggle="modal" data-target="#addReview" onclick="document.getElementById('review_form_update').hidden = true; 
                     document.getElementById('update_review_btn').hidden = true;
                     document.getElementById('review_form_create').hidden = false; 
                     document.getElementById('create_review_btn').hidden = false;  ">add a review</button>
+            @endif
           </div>
         </div>
       </div>
