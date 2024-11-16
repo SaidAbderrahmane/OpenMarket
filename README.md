@@ -119,27 +119,27 @@ OpenMarket/
 ## Screenshots  
 
 ### Admin Dashboard  
-![Admin Dashboard](screenshots/admin_dashboard.png)  
-![Admin Dashboard 2](screenshots/admin_dashboard1.png)  
-![Admin Dashboard 3](screenshots/admin_dashboard2.png)  
+![Admin Dashboard](screenshots/admin_dashboard.PNG)  
+![Admin Dashboard 2](screenshots/admin_dashboard1.PNG)  
+![Admin Dashboard 3](screenshots/admin_dashboard2.PNG)  
 
 ### Products CRUD  
-![Products CRUD](screenshots/products_crud.png) 
+![Products CRUD](screenshots/products_crud.PNG) 
 
 ### Vendor Product Management  
-![Vendor Product Management](screenshots/vendor_dashboard.png)  
+![Vendor Product Management](screenshots/vendor_dashboard.PNG)  
 
 ### Store Page  
-![Customer Cart](screenshots/store_page.png)  
+![Customer Cart](screenshots/store_page.PNG)  
 
 ### Product Page  
-![Product Page](screenshots/product_page.png)  
+![Product Page](screenshots/product_page.PNG)  
 
 ### Customer Cart  
-![Customer Cart](screenshots/cart_page.png)  
+![Customer Cart](screenshots/cart_page.PNG)  
 
 ### Checkout Page  
-![Checkout Page](screenshots/checkout_page.png)  
+![Checkout Page](screenshots/checkout_page.PNG)  
 
 ---  
 
