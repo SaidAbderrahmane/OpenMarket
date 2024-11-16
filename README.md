@@ -1,62 +1,171 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# OpenMarket  
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**OpenMarket** is a multi-vendor e-commerce platform built using **Laravel**, designed to connect vendors and buyers seamlessly. It offers robust functionalities for managing products, orders, and payments while providing a feature-rich admin panel for complete control over the platform.  
 
-## About Laravel
+---  
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features  
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### General Features  
+- **Multi-Vendor System**: Support for multiple sellers to list and manage products.  
+- **Admin Dashboard**: Full control over products, users, and orders.  
+- **User Roles**: Admin, Vendor, and Customer roles, each with distinct capabilities.  
+- **Product Filtering**: Search and filter by categories, price, and availability.  
+- **Cart and Wishlist Management**: Streamlined shopping experience for customers.  
+- **Payment Integration**: Supports cash and credit card payments using stripe api.  
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Dependencies  
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+The following dependencies are used in this project:  
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- **PHP** (v8.0 or later)  
+- **Laravel** (v8.x or later)  
+- **Voyager** (v1.5): Admin panel for Laravel.  
+- **Composer**: Dependency manager for PHP.  
+- **MySQL**: Relational database for structured data storage.  
+- **Bootstrap**: Frontend framework for responsive design.  
+- **Stripe API**: Secure payment processing.  
+- **jQuery/Ajax**: For dynamic interactions and asynchronous requests.  
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Installation  
 
-### Premium Partners
+### Prerequisites  
+- **XAMPP** for PHP and MySQL installation.  
+- **Composer** for dependency management.  
+- Laravel 8.x or later.  
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
+### Steps  
 
-## Contributing
+1. **Install PHP and MySQL**  
+   - Download and install XAMPP from the [official site](https://www.apachefriends.org/index.html).  
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+2. **Install Composer**  
+   - Download Composer from [getcomposer.org](https://getcomposer.org/) and install it.  
 
-## Code of Conduct
+3. **Install Laravel**  
+   - Run the following command to install Laravel globally:  
+     ```bash  
+     composer global require laravel/installer  
+     ```  
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+4. **Clone the Project and Start the Server**  
+   - Open a terminal inside the project folder and start the Laravel development server:  
+     ```bash  
+     php artisan serve  
+     ```  
 
-## Security Vulnerabilities
+5. **Install Voyager**  
+   - Add Voyager to the project by running:  
+     ```bash  
+     composer require tcg/voyager  
+     ```  
+   - Install Voyager:  
+     ```bash  
+     php artisan voyager:install  
+     ```  
+     Alternatively, you can run these commands step by step:  
+     ```bash  
+     php artisan migrate  
+     php artisan db:seed --class=VoyagerDatabaseSeeder  
+     php artisan storage:link  
+     composer dump-autoload  
+     ```  
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+6. **Create an Admin User**  
+   - Use the following command to create an admin user:  
+     ```bash  
+     php artisan voyager:admin admin@admin.com --create  
+     ```  
+   - If you encounter the error `'route not defined'` on the Voyager page, comment out the **widgets** section in `/config/voyager.php`.  
 
-## License
+7. **Setup the Admin Panel**  
+   - Execute the provided SQL script to configure the admin panel.  
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+8. **Workaround for Viewing BREAD**  
+   - Manually create a BREAD (Browse, Read, Edit, Add, Delete) to display previous entries, then delete it after viewing.  
+
+9. **Seed the Database**  
+   - Run the following command to populate the database with initial data:  
+     ```bash  
+     php artisan db:seed  
+     ```  
+
+10. **Configure the Menu Builder**  
+    - Navigate to the Voyager menu builder in the admin panel, make edits to the menu, and save. The menu will now appear correctly.  
+
+---  
+
+## Folder Structure  
+
+```plaintext  
+OpenMarket/  
+├── app/                # Core application logic  
+├── database/           # Migrations and seeders  
+├── public/             # Public assets  
+├── resources/          # Views and frontend templates  
+├── routes/             # API and web routes  
+├── config/             # Configuration files  
+├── .env                # Environment variables  
+├── artisan             # CLI entry point  
+└── README.md           # Project documentation  
+```  
+
+---  
+
+## Screenshots  
+
+### Admin Dashboard  
+![Admin Dashboard](screenshots/admin_dashboard.png)  
+![Admin Dashboard 2](screenshots/admin_dashboard1.png)  
+![Admin Dashboard 3](screenshots/admin_dashboard2.png)  
+
+### Products CRUD  
+![Products CRUD](screenshots/products_crud.png) 
+
+### Vendor Product Management  
+![Vendor Product Management](screenshots/vendor_dashboard.png)  
+
+### Store Page  
+![Customer Cart](screenshots/store_page.png)  
+
+### Product Page  
+![Product Page](screenshots/product_page.png)  
+
+### Customer Cart  
+![Customer Cart](screenshots/cart_page.png)  
+
+### Checkout Page  
+![Checkout Page](screenshots/checkout_page.png)  
+
+---  
+
+## Contributing  
+
+Contributions are welcome!  
+
+1. Fork the repository.  
+2. Create a new branch (`feature/my-feature`).  
+3. Commit your changes (`git commit -m 'Add feature'`).  
+4. Push to the branch (`git push origin feature/my-feature`).  
+5. Open a pull request.  
+
+---  
+
+## License  
+
+This project is licensed under the [MIT License](LICENSE).  
+
+---  
+
+## Contact  
+
+- **Author**: [Said Abderrahmane](https://github.com/SaidAbderrahmane)  
+- **LinkedIn**: [linkedin.com/hadj-said-abderrahmane](https://linkedin.com/hadj-said-abderrahmane)  
+
+---  
+
+Happy coding! 🚀  
